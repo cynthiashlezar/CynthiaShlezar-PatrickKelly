@@ -52,5 +52,14 @@ public class SongRequest {
 		}
 		System.out.println(jukebox.getCurrentSongTitle());
 	}
+	
+	/*
+	 * TODO: remember to think about formatting seconds into MM:SS
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return "" + song.getLength() + " " + song.getTitle() + " " + song.getArtist();
+	}
 
 }
