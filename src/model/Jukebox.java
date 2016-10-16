@@ -264,7 +264,7 @@ public class Jukebox extends Observable {
 		return currentAccount.getCreditAvailable();
 	}
 	
-	public ListModel getSongQueue() {
+	public ListModel getPlaylist() {
 		
 	}
 	
