@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.TreeMap;
 
+import javax.swing.ListModel;
+import javax.swing.event.ListDataListener;
+
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
@@ -145,7 +148,7 @@ public class Jukebox extends Observable {
 	 * for the end of a song and then executing the next request.  (Or immediately executes
 	 * a request if the queue is empty.
 	 */
-	private class SongQueue implements EndOfSongListener {
+	private class SongQueue implements EndOfSongListener, ListModel {
 		
 		ArrayList<SongRequest> requests;  // hold onto those SongRequests!
 		
@@ -191,6 +194,30 @@ public class Jukebox extends Observable {
 				requests.get(0).execute();
 			}
 		}
+
+		@Override
+		public int getSize() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public Object getElementAt(int index) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public void addListDataListener(ListDataListener l) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void removeListDataListener(ListDataListener l) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 		 
 	}
@@ -227,6 +254,18 @@ public class Jukebox extends Observable {
 	 */
 	public void removeCurrentAccount() {
 		currentAccount = null;
+	}
+	
+	public String printUsername() {
+		return currentAccount.getName();
+	}
+	
+	public int getUserCredit() {
+		return currentAccount.getCreditAvailable();
+	}
+	
+	public ListModel getSongQueue() {
+		
 	}
 	
 }
