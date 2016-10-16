@@ -197,26 +197,22 @@ public class Jukebox extends Observable {
 
 		@Override
 		public int getSize() {
-			// TODO Auto-generated method stub
-			return 0;
+			return requests.size();
 		}
 
 		@Override
 		public Object getElementAt(int index) {
-			// TODO Auto-generated method stub
-			return null;
+			return requests.get(index).toString();
 		}
 
 		@Override
 		public void addListDataListener(ListDataListener l) {
-			// TODO Auto-generated method stub
-			
+			//nothing
 		}
 
 		@Override
 		public void removeListDataListener(ListDataListener l) {
-			// TODO Auto-generated method stub
-			
+			//nothing	
 		}
 		
 		 
@@ -265,7 +261,7 @@ public class Jukebox extends Observable {
 	}
 	
 	public ListModel getPlaylist() {
-		
+		return null;
 	}
 	
 }
