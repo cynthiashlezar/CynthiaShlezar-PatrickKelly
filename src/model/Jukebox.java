@@ -72,6 +72,7 @@ public class Jukebox extends Observable {
 		}
 		// check to see if the song exists and get the song object
 		if (! library.songExists(title)) {
+			System.out.println("Song doesn't exist!!!!");
 			return SongSelection.SONG_NOT_EXIST;
 		} else {
 			requested = library.getSong(title);
@@ -219,7 +220,7 @@ public class Jukebox extends Observable {
 	/*
 	 * Returns the SongQueue in ListModel form for use by the view.
 	 */
-	public ListModel getPlaylist() {
+	public SongQueue getPlaylist() {
 		return songQueue;
 	}
 	
@@ -248,7 +249,7 @@ public class Jukebox extends Observable {
 	 * Added ListModel implementation so that the SongQueue object can be provided as a ListModel to
 	 * the view.
 	 */
-	private class SongQueue implements EndOfSongListener, ListModel {
+	public class SongQueue implements EndOfSongListener, ListModel {
 		
 		ArrayList<SongRequest> requests;  // hold onto those SongRequests!
 		
@@ -307,7 +308,7 @@ public class Jukebox extends Observable {
 
 		@Override
 		public Object getElementAt(int index) {
-			return requests.get(index).getSong().toString();
+			return requests.get(index).toString();
 		}
 
 		@Override

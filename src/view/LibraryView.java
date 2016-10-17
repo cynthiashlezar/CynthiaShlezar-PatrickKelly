@@ -68,6 +68,7 @@ public class LibraryView extends JPanel implements Observer {
 				return;
 			}
 			
+			System.out.println("***Song to be requested: " + (String) table.getValueAt(table.getSelectedRow(), 0));
 			truth = system.requestSongFromMenu((String) table.getValueAt(table.getSelectedRow(), 0));
 			
 			if(truth != SongSelection.SUCCESS) {

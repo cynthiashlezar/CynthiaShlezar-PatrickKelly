@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import org.junit.Test;
 
 import model.*;
+import model.Jukebox.SongQueue;
 import songplayer.SongPlayer;
 
 public class Tests2 {
@@ -283,6 +284,13 @@ public class Tests2 {
 		
 	}
 
-
+	@Test
+	public void testGetElementAt() {
+		Jukebox j = new Jukebox();
+		//j.addSongToQueue();
+		SongQueue q = j.getPlaylist();
+		
+		System.out.println("TEST: " + q.getElementAt(0));
+	}
 
 }
