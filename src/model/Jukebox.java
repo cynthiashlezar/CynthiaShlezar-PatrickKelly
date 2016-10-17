@@ -186,25 +186,19 @@ public class Jukebox extends Observable {
 		return songQueue;
 	}
 	
-	/*
-	 * Returns an ArrayList containing the titles of all the songs in the SongLibrary.  Used
-	 * by the view to be able to list the songs.
-	 * 
-	 * This is going to go away, I think.  Commenting it out for now.
-	 */
-//	public ArrayList<String> fetchLibrary() {
+//	/*
+//	 * Returns an ArrayList containing all the songs in the SongLibrary.  Used
+//	 * by the view to be able to list the songs.
+//	 */
+//	public ArrayList<Song> fetchLibrary() {
 //		
-//		ArrayList<String> titles = new ArrayList<>();
+//		ArrayList<Song> songs = new ArrayList<>();
 //		
 //		for(Map.Entry<String, Song> entry : this.library.retrieveTitles().entrySet()) {
-//			String song = entry.getKey();
-//			titles.add(song);
+//			Song song = entry.getValue();
+//			songs.add(song);
 //		}
-//		
-//		
-//		return titles;
-//		
-//		
+//		return songs;	
 //	}
 
 	/*

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -113,17 +114,34 @@ public class SongLibrary implements TableModel {
 			return null;
 		}
 	}
+	
+	/*
+	 * Returns an ArrayList containing all the songs in the SongLibrary.  Used
+	 * by the view to be able to list the songs.
+	 */
+	public ArrayList<Song> fetchLibrary() {
+		
+		ArrayList<Song> songs = new ArrayList<>();
+		
+		
+		for(Map.Entry<String, Song> entry : library.entrySet()) {
+			Song song = entry.getValue();
+			songs.add(song);
+		}
+		return songs;	
+	}
 
 	
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-		switch (columnIndex) {
-			case 0: return String.class;
-			case 1: return String.class;
-			case 2: return Integer.class;
-			default: return null;
-		}
+//		switch (columnIndex) {
+//			case 0: return String.class;
+//			case 1: return String.class;
+//			case 2: return Integer.class;
+//			default: return null;
+//		}
+		return String.class;
 	}
 
 	@Override
@@ -151,11 +169,12 @@ public class SongLibrary implements TableModel {
 	 */
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Song currentSong = library.get(rowIndex);
+		ArrayList<Song> songsArrayList = fetchLibrary();
+		Song currentSong = songsArrayList.get(rowIndex);
 		switch (columnIndex) {
 			case 0: return currentSong.getTitle();
 			case 1: return currentSong.getArtist();
-			case 2: return currentSong.getLength();
+			case 2: return "" + currentSong.getLength();
 			default: return null;
 		}
 	}

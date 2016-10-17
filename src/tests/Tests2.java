@@ -261,11 +261,16 @@ public class Tests2 {
 		SongLibrary library = new SongLibrary("songs.txt");
 		assertEquals(String.class, library.getColumnClass(0));
 		assertEquals(String.class, library.getColumnClass(1));
-		assertEquals(Integer.class, library.getColumnClass(2));
+		assertEquals(String.class, library.getColumnClass(2));
 		assertEquals(3, library.getColumnCount());
 		assertTrue(library.getColumnName(0).equals("Title"));
 		assertTrue(library.getColumnName(1).equals("Artist"));
 		assertTrue(library.getColumnName(2).equals("Seconds"));
+		assertEquals(9, library.getRowCount());
+		System.out.println(library.getValueAt(0, 0));
+		assertTrue(library.getValueAt(8,1).equals("Pierre Langer"));
+		assertTrue(library.getValueAt(5, 2).equals("15"));
+		
 	}
 
 
