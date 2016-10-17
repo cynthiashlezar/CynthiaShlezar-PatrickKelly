@@ -61,5 +61,9 @@ public class SongRequest {
 	public String toString() {
 		return "" + song.getLength() + " " + song.getTitle() + " " + song.getArtist();
 	}
+	
+	public Song getSong() {
+		return song;
+	}
 
 }

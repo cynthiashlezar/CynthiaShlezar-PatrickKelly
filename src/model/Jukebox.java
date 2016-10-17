@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
+import javax.swing.table.TableModel;
 
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
@@ -202,7 +203,7 @@ public class Jukebox extends Observable {
 
 		@Override
 		public Object getElementAt(int index) {
-			return requests.get(index).toString();
+			return requests.get(index).getSong().toString();
 		}
 
 		@Override
@@ -213,6 +214,15 @@ public class Jukebox extends Observable {
 		@Override
 		public void removeListDataListener(ListDataListener l) {
 			//nothing	
+		}
+		
+		public ArrayList<Song> getSongQueue() {
+			
+			ArrayList<Song> songs = new ArrayList<>();
+			for(int i = 0; i < requests.size(); i++) {
+				songs.add(requests.get(i).getSong());
+			}
+			return songs;
 		}
 		
 		 
@@ -260,8 +270,10 @@ public class Jukebox extends Observable {
 		return currentAccount.getCreditAvailable();
 	}
 	
-	public ListModel getPlaylist() {
+	public SongLibrary getPlaylist() {
 		return null;
 	}
+
+
 	
 }
