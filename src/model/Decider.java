@@ -42,19 +42,25 @@ public class Decider {
 	 * 			4) Returns true
 	 * Otherwise, the Decider returns false.
 	 */
-	public boolean canPlaySong(Account user, Song song) {
+	public SongSelection canPlaySong(Account user, Song song) {
 		// Check to see whether this user may play this song today.
-		if (user.getCreditAvailable() >= song.getLength() && user.getNumSongsPlayedToday() < songsPerDayPerPerson
-				&& song.getTimesPlayedToday() < numTimesPlayedPermissible) {
-			// increment user songs
-			user.incrementNumSongsPlayedToday();
-			// increment song's num times played
-			song.setTimesPlayedToday();
-			// remove credit from user's account
-			user.withdrawCredit(song.getLength());
-			// return true
-			return true;
+		if (user.getCreditAvailable() < song.getLength()) {
+			return SongSelection.NOT_ENOUGH_CREDIT;
 		}
-		return false;
+		if (user.getNumSongsPlayedToday() >= songsPerDayPerPerson) {
+			return SongSelection.NO_PLAYS_REMAINING_USER;
+		}
+		if (song.getTimesPlayedToday() >= numTimesPlayedPermissible) {
+			return SongSelection.NO_PLAYS_REMAINING_SONG;
+		}
+		// and if all that is false, we can proceed with returning a SUCCESS value.
+		// increment user songs
+		user.incrementNumSongsPlayedToday();
+		// increment song's num times played
+		song.setTimesPlayedToday();
+		// remove credit from user's account
+		user.withdrawCredit(song.getLength());
+		// return SUCCESS
+		return SongSelection.SUCCESS;
 	}
 }

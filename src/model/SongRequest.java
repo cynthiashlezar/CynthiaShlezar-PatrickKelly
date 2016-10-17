@@ -32,10 +32,9 @@ public class SongRequest {
 	/*
 	 * Construct a SongRequest.  
 	 */
-	public SongRequest(Song song, Jukebox jukebox) {
-		listener = jukebox.getSongQueue();
+	public SongRequest(Song song, EndOfSongListener listener) {
+		this.listener = listener;
 		fileName = "songfiles/" + song.getFileName();
-		this.jukebox = jukebox;
 		this.song = song;
 	}
 	
@@ -44,13 +43,12 @@ public class SongRequest {
 	 */
 	public void execute() {
 		SongPlayer.playFile(listener, fileName);
-		jukebox.setCurrentSong(song);
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			System.out.println("Sleep interrupted by JUnit");
 		}
-		System.out.println(jukebox.getCurrentSongTitle());
+		System.out.println(song.getTitle());
 	}
 	
 	/*

@@ -114,57 +114,71 @@ public class SongLibrary implements TableModel {
 		}
 	}
 
+	
+
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		switch (columnIndex) {
+			case 0: return String.class;
+			case 1: return String.class;
+			case 2: return Integer.class;
+			default: return null;
+		}
+	}
+
+	@Override
+	public int getColumnCount() {
+		return 3;
+	}
+
+	@Override
+	public String getColumnName(int columnIndex) {
+		switch (columnIndex) {
+		case 0: return "Title";
+		case 1: return "Artist";
+		case 2: return "Seconds";
+		default: return null;
+	}
+	}
+
 	@Override
 	public int getRowCount() {
 		return library.size();
 	}
 
+	/*
+	 * Interestingly, ...  wait.  Never mind.
+	 */
 	@Override
-	public int getColumnCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public String getColumnName(int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		Song currentSong = library.get(rowIndex);
+		switch (columnIndex) {
+			case 0: return currentSong.getTitle();
+			case 1: return currentSong.getArtist();
+			case 2: return currentSong.getLength();
+			default: return null;
+		}
 	}
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
+		// No.
 		return false;
 	}
-
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void addTableModelListener(TableModelListener l) {
-		// TODO Auto-generated method stub
-		
+		// no.
 	}
 
 	@Override
 	public void removeTableModelListener(TableModelListener l) {
-		// TODO Auto-generated method stub
-		
+		// no
+	}
+
+	@Override
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		// no
 	}
 	
 	

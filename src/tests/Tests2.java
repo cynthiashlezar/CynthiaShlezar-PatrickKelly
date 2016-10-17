@@ -170,8 +170,8 @@ public class Tests2 {
 		 
 		Jukebox jukebox = new Jukebox();
 		jukebox.useCardReader("patrick", "kelly");
-		Account myAccount = jukebox.getCurrentAccount();
-		assertTrue(myAccount != null);
+		String myAccount = jukebox.printUsername();
+		assertTrue(myAccount.equals("patrick"));
 		assertTrue(jukebox.getCurrentSongTitle().equals(""));
 		assertFalse(jukebox.requestSongFromMenu("NotASong"));
 		assertTrue(jukebox.requestSongFromMenu("Tada"));
@@ -183,7 +183,7 @@ public class Tests2 {
 		assertTrue(jukebox.requestSongFromMenu("Tada"));
 		assertFalse(jukebox.requestSongFromMenu("Flute"));
 		jukebox.removeCurrentAccount();
-		assertTrue(jukebox.getCurrentAccount() == null);
+		assertTrue(jukebox.printUsername().equals(""));
 	}
 
 	
@@ -193,7 +193,7 @@ public class Tests2 {
 		File songFile = new File("songfiles/tada.wav");
 		assertTrue(songFile.exists());
 		Song mySong = new Song(songFile, "Microsoft", "Tada", 6, LocalDate.now());
-		SongRequest myRequest = new SongRequest(mySong, jukebox);
+		SongRequest myRequest = new SongRequest(mySong, jukebox.getSongQueueListener());
 		myRequest.execute();
 		
 	}
@@ -216,17 +216,7 @@ public class Tests2 {
 		
 	}
 	
-	@Test
-	public void jukeboxFetchTitles() {
-		Jukebox badJukebox = new Jukebox();
-		ArrayList<String>  titles =  badJukebox.fetchLibrary();
-		assertTrue(titles.contains("Danse Macabre"));
-		assertTrue(titles.contains("Space Music"));
-		assertTrue(titles.contains("Untameable Fire"));
-		assertFalse(titles.contains("My Funny Valentine"));
-		
-	}
-	
+
 	@Test
 	public void testCreatingNewAccountCollection() {
 		File fileName = new File("extra_files/accounts.txt");
