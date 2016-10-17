@@ -257,6 +257,13 @@ public class Tests2 {
 	}
 	
 	@Test
+	public void testAccountCollection() {
+		AccountCollection myAccounts = new AccountCollection();
+		assertFalse(myAccounts.createNewAccount("patrick", "kelly"));
+		assertNull(myAccounts.getAccount("notAnAccount"));
+	}
+	
+	@Test
 	public void testTableModelBusiness() {
 		SongLibrary library = new SongLibrary("songs.txt");
 		assertEquals(String.class, library.getColumnClass(0));
@@ -270,6 +277,9 @@ public class Tests2 {
 		System.out.println(library.getValueAt(0, 0));
 		assertTrue(library.getValueAt(8,1).equals("Pierre Langer"));
 		assertTrue(library.getValueAt(5, 2).equals("15"));
+		assertNull(library.getValueAt(0, 5));
+		assertNull(library.getColumnName(3));
+		assertFalse(library.isCellEditable(0, 0));
 		
 	}
 

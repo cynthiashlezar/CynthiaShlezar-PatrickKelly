@@ -49,29 +49,6 @@ public class Jukebox extends Observable {
 		// currentSong = null;    <------ commenting out.  We don't really need it anymore.
 	}
 	
-	public static void main (String[] args) {
-		Jukebox jukebox = new Jukebox();
-		jukebox.useCardReader("patrick", "kelly");
-		String myAccount = jukebox.printUsername();
-		assertTrue(myAccount.equals("patrick"));
-		System.out.println(jukebox.printUsername());
-		assertTrue(jukebox.getCurrentSongTitle().equals(""));
-		assertEquals(SongSelection.SONG_NOT_EXIST, jukebox.requestSongFromMenu("NotASong"));
-		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Flute"));
-		// TODO: this needs to be checked out.  Do we need to make the SongQueue
-		// a Singleton before we can test this stuff?
-		assertTrue(jukebox.getCurrentSongTitle().equals("Flute"));
-		System.out.println("queue size should be 1: " + jukebox.getPlaylist().getSize());
-		System.out.println("should be 'Flute': " + jukebox.getCurrentSongTitle());
-		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Flute"));
-		// assertTrue(jukebox.getCurrentSongTitle().equals("Flute"));
-		// test above won't work in JUnit; we never start executing the 2nd song request
-		// test in main() of JukeboxPrototype
-		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Tada"));
-		assertEquals(SongSelection.NO_PLAYS_REMAINING_USER, jukebox.requestSongFromMenu("Flute"));
-		jukebox.removeCurrentAccount();
-		assertTrue(jukebox.printUsername().equals(""));
-	}
 	
 	/*
 	 * Handles incoming song requests from a view.
