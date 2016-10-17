@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
+import javax.swing.table.TableModel;
 
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
@@ -249,6 +250,10 @@ public class Jukebox extends Observable {
 	 */
 	public ListModel getPlaylist() {
 		return songQueue;
+	}
+	
+	public TableModel getLibraryTable() {
+		return library;
 	}
 	
 

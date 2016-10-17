@@ -255,6 +255,18 @@ public class Tests2 {
 		}
 
 	}
+	
+	@Test
+	public void testTableModelBusiness() {
+		SongLibrary library = new SongLibrary("songs.txt");
+		assertEquals(String.class, library.getColumnClass(0));
+		assertEquals(String.class, library.getColumnClass(1));
+		assertEquals(Integer.class, library.getColumnClass(2));
+		assertEquals(3, library.getColumnCount());
+		assertTrue(library.getColumnName(0).equals("Title"));
+		assertTrue(library.getColumnName(1).equals("Artist"));
+		assertTrue(library.getColumnName(2).equals("Seconds"));
+	}
 
 
 
