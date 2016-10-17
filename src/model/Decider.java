@@ -40,7 +40,10 @@ public class Decider {
 	 * 			2) Increments the number of songs the user has played today
 	 * 			3) Increments the number of times the song has been played today
 	 * 			4) Returns true
-	 * Otherwise, the Decider returns false.
+	 * Otherwise, the Decider a failure Enum (see SongSelection Enum for examples.)
+	 * 
+	 * Note: This method has a bias toward reporting that a user has played too many songs
+	 * rather than that the song has already been played too many times.
 	 */
 	public SongSelection canPlaySong(Account user, Song song) {
 		// Check to see whether this user may play this song today.

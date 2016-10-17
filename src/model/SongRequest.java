@@ -43,11 +43,11 @@ public class SongRequest {
 	 */
 	public void execute() {
 		SongPlayer.playFile(listener, fileName);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			System.out.println("Sleep interrupted by JUnit");
-		}
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			System.out.println("Sleep interrupted by JUnit");
+//		}
 		System.out.println(song.getTitle());
 	}
 	

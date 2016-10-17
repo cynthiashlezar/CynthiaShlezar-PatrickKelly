@@ -48,6 +48,30 @@ public class Jukebox extends Observable {
 		// currentSong = null;    <------ commenting out.  We don't really need it anymore.
 	}
 	
+	public static void main (String[] args) {
+		Jukebox jukebox = new Jukebox();
+		jukebox.useCardReader("patrick", "kelly");
+		String myAccount = jukebox.printUsername();
+		assertTrue(myAccount.equals("patrick"));
+		System.out.println(jukebox.printUsername());
+		assertTrue(jukebox.getCurrentSongTitle().equals(""));
+		assertEquals(SongSelection.SONG_NOT_EXIST, jukebox.requestSongFromMenu("NotASong"));
+		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Flute"));
+		// TODO: this needs to be checked out.  Do we need to make the SongQueue
+		// a Singleton before we can test this stuff?
+		assertTrue(jukebox.getCurrentSongTitle().equals("Flute"));
+		System.out.println("queue size should be 1: " + jukebox.getPlaylist().getSize());
+		System.out.println("should be 'Flute': " + jukebox.getCurrentSongTitle());
+		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Flute"));
+		// assertTrue(jukebox.getCurrentSongTitle().equals("Flute"));
+		// test above won't work in JUnit; we never start executing the 2nd song request
+		// test in main() of JukeboxPrototype
+		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Tada"));
+		assertEquals(SongSelection.NO_PLAYS_REMAINING_USER, jukebox.requestSongFromMenu("Flute"));
+		jukebox.removeCurrentAccount();
+		assertTrue(jukebox.printUsername().equals(""));
+	}
+	
 	/*
 	 * Handles incoming song requests from a view.
 	 * 
@@ -63,6 +87,7 @@ public class Jukebox extends Observable {
 	 */
 	public SongSelection requestSongFromMenu(String title) {
 		Song requested = null;
+		SongSelection result = null;
 		// first make sure a user is logged in.
 		if (currentAccount == null) {
 			return SongSelection.NOT_LOGGED_IN;
@@ -72,9 +97,12 @@ public class Jukebox extends Observable {
 			return SongSelection.SONG_NOT_EXIST;
 		} else {
 			requested = library.getSong(title);
+			result = decider.canPlaySong(currentAccount, requested);
 		}	
-		return decider.canPlaySong(currentAccount, requested);
-		
+		if (result == SongSelection.SUCCESS) {
+			addSongToQueue(requested);
+		}
+		return result;
 	}
 	
 	/* 
@@ -100,6 +128,8 @@ public class Jukebox extends Observable {
 	 */
 	public void addSongToQueue(Song song) {
 		SongRequest songRequest = new SongRequest(song, songQueue);
+		System.out.println(songRequest);
+		System.out.println("" + songQueue.getSize());
 		songQueue.addSong(songRequest);
 		setChanged();
 		notifyObservers();
@@ -120,10 +150,10 @@ public class Jukebox extends Observable {
 		if (songQueue.getSize() == 0) {
 			return "";
 		}
-		String currentSong = songQueue.getElementAt(0).toString();
-		currentSong = currentSong.substring(currentSong.indexOf(' ') + 1);
-		currentSong = currentSong.substring(0, currentSong.indexOf(' '));
-		return currentSong;
+		String currentSongTitle = songQueue.getElementAt(0).toString();
+		currentSongTitle = currentSongTitle.substring(currentSongTitle.indexOf(' ') + 1);
+		currentSongTitle = currentSongTitle.substring(0, currentSongTitle.indexOf(' '));
+		return currentSongTitle;
 	}
 	
 	/*
@@ -264,6 +294,7 @@ public class Jukebox extends Observable {
 			if (requests.isEmpty()) {
 				requests.add(request);
 				requests.get(0).execute();
+				
 				// for testing
 				// System.out.println("Executing song request for " + request.fileName);
 			} else {
