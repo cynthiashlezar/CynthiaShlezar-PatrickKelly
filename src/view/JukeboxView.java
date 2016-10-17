@@ -26,7 +26,6 @@ public class JukeboxView extends JPanel implements Observer {
 	private UserLogin loginScreen; 
 	private Jukebox system;
 
-	
 	public JukeboxView(Jukebox system) {
 		
 		this.system = system;
@@ -35,7 +34,7 @@ public class JukeboxView extends JPanel implements Observer {
 		
 		songSelectionPart = new SongMenu(system);	//setup song menu
 		songSelectionPart.setLocation(100, 0);
-		songSelectionPart.setSize(200, 100);
+		songSelectionPart.setSize(800, 600);
 		this.add(songSelectionPart);
 		system.addObserver(songSelectionPart);
 		
@@ -43,8 +42,7 @@ public class JukeboxView extends JPanel implements Observer {
 		loginScreen.setLocation(25, 150);
 		loginScreen.setSize(350, 125);
 		this.add(loginScreen);
-		system.addObserver(loginScreen);
-		 
+		system.addObserver(loginScreen);	 
 
 	}
 	
