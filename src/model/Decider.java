@@ -40,21 +40,30 @@ public class Decider {
 	 * 			2) Increments the number of songs the user has played today
 	 * 			3) Increments the number of times the song has been played today
 	 * 			4) Returns true
-	 * Otherwise, the Decider returns false.
+	 * Otherwise, the Decider a failure Enum (see SongSelection Enum for examples.)
+	 * 
+	 * Note: This method has a bias toward reporting that a user has played too many songs
+	 * rather than that the song has already been played too many times.
 	 */
-	public boolean canPlaySong(Account user, Song song) {
+	public SongSelection canPlaySong(Account user, Song song) {
 		// Check to see whether this user may play this song today.
-		if (user.getCreditAvailable() >= song.getLength() && user.getNumSongsPlayedToday() < songsPerDayPerPerson
-				&& song.getTimesPlayedToday() < numTimesPlayedPermissible) {
-			// increment user songs
-			user.incrementNumSongsPlayedToday();
-			// increment song's num times played
-			song.setTimesPlayedToday();
-			// remove credit from user's account
-			user.withdrawCredit(song.getLength());
-			// return true
-			return true;
+		if (user.getCreditAvailable() < song.getLength()) {
+			return SongSelection.NOT_ENOUGH_CREDIT;
 		}
-		return false;
+		if (user.getNumSongsPlayedToday() >= songsPerDayPerPerson) {
+			return SongSelection.NO_PLAYS_REMAINING_USER;
+		}
+		if (song.getTimesPlayedToday() >= numTimesPlayedPermissible) {
+			return SongSelection.NO_PLAYS_REMAINING_SONG;
+		}
+		// and if all that is false, we can proceed with returning a SUCCESS value.
+		// increment user songs
+		user.incrementNumSongsPlayedToday();
+		// increment song's num times played
+		song.setTimesPlayedToday();
+		// remove credit from user's account
+		user.withdrawCredit(song.getLength());
+		// return SUCCESS
+		return SongSelection.SUCCESS;
 	}
 }

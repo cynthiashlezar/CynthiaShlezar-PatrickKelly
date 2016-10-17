@@ -37,7 +37,7 @@ public class Jukebox extends Observable {
 	private SongLibrary library;
 	private SongPlayer player;
 	private Account currentAccount;
-	private Song currentSong;
+	// private Song currentSong;  <------- not really used; commenting out for now
 	private SongQueue songQueue;
 	
 	public Jukebox() {
@@ -46,8 +46,9 @@ public class Jukebox extends Observable {
 		library = new SongLibrary("songs.txt");
 		songQueue = new SongQueue();
 		currentAccount = null;
-		currentSong = null;
+		// currentSong = null;    <------ commenting out.  We don't really need it anymore.
 	}
+	
 	
 	/*
 	 * Handles incoming song requests from a view.
@@ -55,26 +56,31 @@ public class Jukebox extends Observable {
 	 * @params: String title: the title of the song
 	 * 			Account account: the account of the logged in user.
 	 * 
-	 * @returns: boolean.  true if the song can be played and is added to the queue
-	 *                     false if the title doesn't belong to a song or if the decider
-	 *                            determines that the song may not be played.
+	 * @returns: SongSelection ENUM.  Possibilities:
+	 *                   NOT_LOGGED_IN : no user is logged in
+	 *                   SONG_NOT_EXIST : no song by that title in the collection
+	 *                   NOT_ENOUGH_CREDIT : the user doesn't have enough seconds remaining
+	 *                   NO_PLAYS_REMAINING_USER: the user already played her/his max songs for the day
+	 *                   NO_PLAYS_REMAINING_SONG: the song has already been played its max # of times for the day.
 	 */
-	public boolean requestSongFromMenu(String title) {
+	public SongSelection requestSongFromMenu(String title) {
 		Song requested = null;
-		// check to see if the song exists and get the song object
-		if (library.songExists(title)) {
-			requested = library.getSong(title);
-			// see if the user can play the song today
-			if (decider.canPlaySong(currentAccount, requested)) {
-				// yay!  add the song to the queue and return true.
-				addSongToQueue(requested);
-				return true;
-			}
+		SongSelection result = null;
+		// first make sure a user is logged in.
+		if (currentAccount == null) {
+			return SongSelection.NOT_LOGGED_IN;
 		}
-		// cannot play song - either it doesn't exist or the user can't play it today.
-		// return false.
-		return false;
-		
+		// check to see if the song exists and get the song object
+		if (! library.songExists(title)) {
+			return SongSelection.SONG_NOT_EXIST;
+		} else {
+			requested = library.getSong(title);
+			result = decider.canPlaySong(currentAccount, requested);
+		}	
+		if (result == SongSelection.SUCCESS) {
+			addSongToQueue(requested);
+		}
+		return result;
 	}
 	
 	/* 
@@ -99,7 +105,9 @@ public class Jukebox extends Observable {
 	 * @returns: void
 	 */
 	public void addSongToQueue(Song song) {
-		SongRequest songRequest = new SongRequest(song, this);
+		SongRequest songRequest = new SongRequest(song, songQueue);
+		System.out.println(songRequest);
+		System.out.println("" + songQueue.getSize());
 		songQueue.addSong(songRequest);
 		setChanged();
 		notifyObservers();
@@ -111,13 +119,19 @@ public class Jukebox extends Observable {
 	 * 
 	 * Assumes that a SongRequest has been executed; the SongRequest sets
 	 * this variable.  
+	 * 
+	 * Just used for testing at this point.  Perhaps testing can be re-done such that
+	 * we can get rid of this method.
 
 	 */
 	public String getCurrentSongTitle() {
-		if (currentSong == null) {
+		if (songQueue.getSize() == 0) {
 			return "";
 		}
-		return currentSong.getTitle();
+		String currentSongTitle = songQueue.getElementAt(0).toString();
+		currentSongTitle = currentSongTitle.substring(currentSongTitle.indexOf(' ') + 1);
+		currentSongTitle = currentSongTitle.substring(0, currentSongTitle.indexOf(' '));
+		return currentSongTitle;
 	}
 	
 	/*
@@ -126,28 +140,113 @@ public class Jukebox extends Observable {
 	 * update.
 	 * 
 	 * Used by a SongRequest object when it executes.
+	 * 
+	 * Not really needed, since we're not displaying anything based on the currentSong
+	 * variable.  Commenting out.
 	 */
-	public void setCurrentSong(Song song) {
-		currentSong = song;
-		setChanged();
-		notifyObservers();
-	}
+//	public void setCurrentSong(Song song) {
+//		currentSong = song;
+//		setChanged();
+//		notifyObservers();
+//	}
 	
 	/*
 	 * Returns the SongQueue object, which listens for the end of a song before
 	 * playing another.  This is used in the creation of SongRequest objects (since
 	 * an EndOfSongListener object is used by the SongPlayer when reporting that
 	 * a song is done.
+	 * 
+	 * Used for testing only, really.  But if I re-do some tests differently, I can perhaps
+	 * get rid of this method.
 	 */
-	public EndOfSongListener getSongQueue() {
+	public EndOfSongListener getSongQueueListener() {
 		return songQueue;
 	}
 	
+//	/*
+//	 * Returns an ArrayList containing all the songs in the SongLibrary.  Used
+//	 * by the view to be able to list the songs.
+//	 */
+//	public ArrayList<Song> fetchLibrary() {
+//		
+//		ArrayList<Song> songs = new ArrayList<>();
+//		
+//		for(Map.Entry<String, Song> entry : this.library.retrieveTitles().entrySet()) {
+//			Song song = entry.getValue();
+//			songs.add(song);
+//		}
+//		return songs;	
+//	}
+
+	/*
+	 * Used by the view to display information regarding the current user.
+	 * Returns an Account object.
+	 * 
+	 * Commenting this method out for now to see if we can get by without returning the
+	 * whole account object to the view.
+	 */
+	public Account getCurrentAccount() {
+		return currentAccount;
+	}
 	
 	/*
-	 * Private inner class SongQueue.  This class handles the queue of song requests, listening
-	 * for the end of a song and then executing the next request.  (Or immediately executes
-	 * a request if the queue is empty.
+	 * Logs out the current user.  (Used by the view).
+	 */
+	public void removeCurrentAccount() {
+		currentAccount = null;
+		setChanged();
+		notifyObservers();
+	}
+	
+	/*
+	 * Returns the username of the currently logged in user.  Used by the view.
+	 */
+	public String printUsername() {
+		if (currentAccount == null) {
+			return "";
+		}
+		return currentAccount.getName();
+	}
+	
+	/*
+	 * Returns an integer value representing the number of seconds of credit left
+	 * in the user's account.  Used by the view.
+	 */
+	public int getUserCredit() {
+		return currentAccount.getCreditAvailable();
+	}
+	
+	/*
+	 * Returns the SongQueue in ListModel form for use by the view.
+	 */
+	public ListModel getPlaylist() {
+		return songQueue;
+	}
+	
+	public TableModel getLibraryTable() {
+		return library;
+	}
+	
+
+
+//                            public outer Jukebox class above
+
+// ============================================================================================ //
+// ============================================================================================ //
+
+//                           private inner SongQueue Class Below
+
+	
+	/*
+	 * Private inner class SongQueue.  
+	 * 
+	 * Responsibility: manages the Jukebox's queue of songs.
+	 * 
+	 * This class handles the queue of song requests, listening for the end of a song and then executing 
+	 * the next request.  (Or immediately executes a request if the queue is empty.
+	 * 
+	 * Added ListModel implementation so that the SongQueue object can be provided as a ListModel to
+	 * the view.
 	 */
 	private class SongQueue implements EndOfSongListener, ListModel {
 		
@@ -171,11 +270,14 @@ public class Jukebox extends Observable {
 			if (requests.isEmpty()) {
 				requests.add(request);
 				requests.get(0).execute();
+				
 				// for testing
 				// System.out.println("Executing song request for " + request.fileName);
 			} else {
 				requests.add(request);
 			}
+			setChanged();
+			notifyObservers();
 		}
 
 		/*
@@ -190,10 +292,12 @@ public class Jukebox extends Observable {
 		public void songFinishedPlaying(EndOfSongEvent eventWithFileNameAndDateFinished) {
 			// System.out.println("got EndOfSongEvent message...");
 			requests.remove(0);
-			setCurrentSong(null);
+			// setCurrentSong(null);    currentSong isn't used any more, but just commenting out for now.
 			if (! requests.isEmpty()) {
 				requests.get(0).execute();
 			}
+			setChanged();
+			notifyObservers();
 		}
 
 		@Override
@@ -214,8 +318,9 @@ public class Jukebox extends Observable {
 		@Override
 		public void removeListDataListener(ListDataListener l) {
 			//nothing	
-		}
+		} 
 		
+
 		public ArrayList<Song> getSongQueue() {
 			
 			ArrayList<Song> songs = new ArrayList<>();
@@ -226,54 +331,13 @@ public class Jukebox extends Observable {
 		}
 		
 		 
-	}
 	
-	/*
-	 * Returns an ArrayList containing the titles of all the songs in the SongLibrary.  Used
-	 * by the view to be able to list the songs.
-	 */
-	public ArrayList<String> fetchLibrary() {
-		
-		ArrayList<String> titles = new ArrayList<>();
-		
-		for(Map.Entry<String, Song> entry : this.library.retrieveTitles().entrySet()) {
-			String song = entry.getKey();
-			titles.add(song);
-		}
-		
-		
-		return titles;
-		
-		
-	}
 
-	/*
-	 * Used by the view to display information regarding the current user.
-	 * Returns an Account object.
-	 */
-	public Account getCurrentAccount() {
-		return currentAccount;
-	}
+	} // End private inner SongQueue class
+
 	
-	/*
-	 * Logs out the current user.  (Used by the view).
-	 */
-	public void removeCurrentAccount() {
-		currentAccount = null;
-	}
-	
-	public String printUsername() {
-		return currentAccount.getName();
-	}
-	
-	public int getUserCredit() {
-		return currentAccount.getCreditAvailable();
-	}
-	
-	public SongLibrary getPlaylist() {
-		return null;
-	}
+}	// end Jukebox class
 
 
 	
-}
+	

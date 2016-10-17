@@ -1,5 +1,0 @@
-package model;
-
-public enum songSelection {
-	NOT_ENOUGH_CREDIT, NO_PLAYS_REMAINING_SONG, NO_PLAYS_REMAINING_USER, SUCCESS, NOT_LOGGED_IN;
-}

@@ -22,7 +22,7 @@ import model.Jukebox;
 
 public class JukeboxView extends JPanel implements Observer {
 	
-	private SongMenu songSelectionPart;
+	//private SongMenu songSelectionPart;
 	private UserLogin loginScreen; 
 	private Jukebox system;
 	private LibraryView library;

@@ -15,6 +15,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import model.Jukebox;
+import model.SongSelection;
 
 public class LibraryView extends JPanel implements Observer {
 	
@@ -34,7 +35,7 @@ public class LibraryView extends JPanel implements Observer {
 		songList.setSize(width - 60, height);
 		songList.setLocation(0, 0);
 		
-		this.model = system.getPlaylist();
+		this.model = (TableModel) system.getLibraryTable();
 		table = new JTable(model);
 		table.setSize(width - 50, height);
 		table.setLocation(0, 0);
@@ -60,7 +61,7 @@ public class LibraryView extends JPanel implements Observer {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			boolean truth = false;
+			SongSelection truth = SongSelection.FAILURE;
 			
 			if (system.getCurrentAccount() == null) {
 				JOptionPane.showMessageDialog(null, "Log in first.");
@@ -69,7 +70,7 @@ public class LibraryView extends JPanel implements Observer {
 			
 			truth = system.requestSongFromMenu((String) table.getValueAt(table.getSelectedRow(), 0));
 			
-			if(!truth) {
+			if(truth != SongSelection.SUCCESS) {
 				JOptionPane.showMessageDialog(null, "You can't play the song!");
 			}
 			update(system, null);

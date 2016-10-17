@@ -108,20 +108,20 @@ public class Tests2 {
 	}
 	
 	@Test
-	public void testDecider() {
+	public void testDeciderAndSongSelectionEnum() {
 		Account fred = new Account("fred", "");
 		Account fred2 = new Account("freddy", "");
 		Song gaga = new Song(new File("songfiles/flute.aif"), "Lady Gaga", "Telephone", 1, LocalDate.now());
 		Decider fancyDecider = new Decider();
-		assertTrue(fancyDecider.canPlaySong(fred, gaga));
-		assertTrue(fancyDecider.canPlaySong(fred, gaga));
-		assertTrue(fancyDecider.canPlaySong(fred, gaga));
-		assertFalse(fancyDecider.canPlaySong(fred, gaga));
-		assertFalse(fancyDecider.canPlaySong(fred2, gaga));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga));
+		assertEquals(SongSelection.NO_PLAYS_REMAINING_USER, fancyDecider.canPlaySong(fred, gaga));
+		assertEquals(SongSelection.NO_PLAYS_REMAINING_SONG, fancyDecider.canPlaySong(fred2, gaga));
 	}
 	
 	@Test
-	public void testDecider2() {
+	public void testDeciderAndSongSelectionEnum2() {
 		Account fred = new Account("fred", "");
 		Account fred2 = new Account("freddy", "");
 		Song gaga1 = new Song(new File("songfiles/flute.aif"), "Lady Gaga", "Telephone", 1, LocalDate.now());
@@ -129,16 +129,19 @@ public class Tests2 {
 		Song gaga3 = new Song(new File("songfiles/flute.aif"), "Lady Gaga", "Alejandro", 1, LocalDate.now());
 		Song gaga4 = new Song(new File("songfiles/flute.aif"), "Lady Gaga", "Bad Romance", 1, LocalDate.now());
 		Decider fancyDecider = new Decider();
-		assertTrue(fancyDecider.canPlaySong(fred, gaga1));
-		assertTrue(fancyDecider.canPlaySong(fred, gaga2));
-		assertTrue(fancyDecider.canPlaySong(fred, gaga3));
-		assertFalse(fancyDecider.canPlaySong(fred, gaga1));
-		assertTrue(fancyDecider.canPlaySong(fred2, gaga1));
-		assertFalse(fancyDecider.canPlaySong(fred, gaga4));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga1));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga2));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga3));
+		assertEquals(SongSelection.NO_PLAYS_REMAINING_USER, fancyDecider.canPlaySong(fred, gaga1));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred2, gaga1));
+		assertEquals(SongSelection.NO_PLAYS_REMAINING_USER, fancyDecider.canPlaySong(fred, gaga4));
 	}
 	
+	/*
+	 * This one makes a song that (falsely) claims to take an entire user's credit.
+	 */
 	@Test
-	public void testDecider3() {
+	public void testDeciderAndSongSelectionEnum3() {
 		Account fred = new Account("fred", "");
 		Account fred2 = new Account("freddy", "");
 		Account fred3 = new Account("freddyPie", "");
@@ -147,15 +150,16 @@ public class Tests2 {
 		Song gaga1 = new Song(new File("songfiles/flute.aif"), "Lady Gaga", "Telephone", 1, LocalDate.now());
 		Song gaga2 = new Song(new File("songfiles/flute.aif"), "Lady Gaga", "Poker Face", 1500*60, LocalDate.now());
 		Decider fancyDecider = new Decider();
-		assertTrue(fancyDecider.canPlaySong(fred, gaga1));
-		assertTrue(fancyDecider.canPlaySong(fred, gaga1));
-		assertFalse(fancyDecider.canPlaySong(fred, gaga2));
-		assertTrue(fancyDecider.canPlaySong(fred, gaga1));
-		assertTrue(fancyDecider.canPlaySong(fred2, gaga2));
-		assertFalse(fancyDecider.canPlaySong(fred2, gaga1));
-		assertTrue(fancyDecider.canPlaySong(fred3, gaga2));
-		assertTrue(fancyDecider.canPlaySong(fred4, gaga2));
-		assertFalse(fancyDecider.canPlaySong(fred5, gaga1));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga1));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga1));
+		assertEquals(SongSelection.NOT_ENOUGH_CREDIT, fancyDecider.canPlaySong(fred, gaga2));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred, gaga1));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred2, gaga2));
+		assertEquals(SongSelection.NOT_ENOUGH_CREDIT, fancyDecider.canPlaySong(fred2, gaga1));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred3, gaga2));
+		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred4, gaga2));
+		assertEquals(SongSelection.NO_PLAYS_REMAINING_SONG, fancyDecider.canPlaySong(fred5, gaga1));
+		assertEquals(SongSelection.NO_PLAYS_REMAINING_SONG, fancyDecider.canPlaySong(fred5, gaga2));
 	}
 	
 	
@@ -170,33 +174,35 @@ public class Tests2 {
 		 
 		Jukebox jukebox = new Jukebox();
 		jukebox.useCardReader("patrick", "kelly");
-		Account myAccount = jukebox.getCurrentAccount();
-		assertTrue(myAccount != null);
+		String myAccount = jukebox.printUsername();
+		assertTrue(myAccount.equals("patrick"));
 		assertTrue(jukebox.getCurrentSongTitle().equals(""));
-		assertFalse(jukebox.requestSongFromMenu("NotASong"));
-		assertTrue(jukebox.requestSongFromMenu("Tada"));
+		assertEquals(SongSelection.SONG_NOT_EXIST, jukebox.requestSongFromMenu("NotASong"));
+		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Tada"));
 		assertTrue(jukebox.getCurrentSongTitle().equals("Tada"));
-		assertTrue(jukebox.requestSongFromMenu("Flute"));
+		System.out.println("queue size should be 1: " + jukebox.getPlaylist().getSize());
+		System.out.println("should be 'Tada': " + jukebox.getCurrentSongTitle());
+		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Flute"));
 		// assertTrue(jukebox.getCurrentSongTitle().equals("Flute"));
 		// test above won't work in JUnit; we never start executing the 2nd song request
 		// test in main() of JukeboxPrototype
-		assertTrue(jukebox.requestSongFromMenu("Tada"));
-		assertFalse(jukebox.requestSongFromMenu("Flute"));
+		assertEquals(SongSelection.SUCCESS, jukebox.requestSongFromMenu("Tada"));
+		assertEquals(SongSelection.NO_PLAYS_REMAINING_USER, jukebox.requestSongFromMenu("Flute"));
 		jukebox.removeCurrentAccount();
-		assertTrue(jukebox.getCurrentAccount() == null);
+		assertTrue(jukebox.printUsername().equals(""));
 	}
 
 	
-	@Test
-	public void testSongRequest() {
-		Jukebox jukebox = new Jukebox();
-		File songFile = new File("songfiles/tada.wav");
-		assertTrue(songFile.exists());
-		Song mySong = new Song(songFile, "Microsoft", "Tada", 6, LocalDate.now());
-		SongRequest myRequest = new SongRequest(mySong, jukebox);
-		myRequest.execute();
-		
-	}
+//	@Test
+//	public void testSongRequest() {
+//		Jukebox jukebox = new Jukebox();
+//		File songFile = new File("songfiles/tada.wav");
+//		assertTrue(songFile.exists());
+//		Song mySong = new Song(songFile, "Microsoft", "Tada", 6, LocalDate.now());
+//		SongRequest myRequest = new SongRequest(mySong, jukebox.getSongQueueListener());
+//		myRequest.execute();
+//		
+//	}
 	
 	@Test
 	public void testAccount() {
@@ -216,17 +222,7 @@ public class Tests2 {
 		
 	}
 	
-	@Test
-	public void jukeboxFetchTitles() {
-		Jukebox badJukebox = new Jukebox();
-		ArrayList<String>  titles =  badJukebox.fetchLibrary();
-		assertTrue(titles.contains("Danse Macabre"));
-		assertTrue(titles.contains("Space Music"));
-		assertTrue(titles.contains("Untameable Fire"));
-		assertFalse(titles.contains("My Funny Valentine"));
-		
-	}
-	
+
 	@Test
 	public void testCreatingNewAccountCollection() {
 		File fileName = new File("extra_files/accounts.txt");
@@ -258,6 +254,33 @@ public class Tests2 {
 			e.printStackTrace();
 		}
 
+	}
+	
+	@Test
+	public void testAccountCollection() {
+		AccountCollection myAccounts = new AccountCollection();
+		assertFalse(myAccounts.createNewAccount("patrick", "kelly"));
+		assertNull(myAccounts.getAccount("notAnAccount"));
+	}
+	
+	@Test
+	public void testTableModelBusiness() {
+		SongLibrary library = new SongLibrary("songs.txt");
+		assertEquals(String.class, library.getColumnClass(0));
+		assertEquals(String.class, library.getColumnClass(1));
+		assertEquals(String.class, library.getColumnClass(2));
+		assertEquals(3, library.getColumnCount());
+		assertTrue(library.getColumnName(0).equals("Title"));
+		assertTrue(library.getColumnName(1).equals("Artist"));
+		assertTrue(library.getColumnName(2).equals("Seconds"));
+		assertEquals(9, library.getRowCount());
+		System.out.println(library.getValueAt(0, 0));
+		assertTrue(library.getValueAt(8,1).equals("Pierre Langer"));
+		assertTrue(library.getValueAt(5, 2).equals("15"));
+		assertNull(library.getValueAt(0, 5));
+		assertNull(library.getColumnName(3));
+		assertFalse(library.isCellEditable(0, 0));
+		
 	}
 
 
