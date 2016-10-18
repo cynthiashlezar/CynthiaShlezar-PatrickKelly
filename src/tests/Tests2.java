@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import javax.swing.ListModel;
+
 import org.junit.Test;
 
 import model.*;
@@ -289,7 +291,7 @@ public class Tests2 {
 		Jukebox j = new Jukebox();
 		File file = new File("extra_files/spacemusic.au");
 		j.addSongToQueue(new Song(file, "artist", "title", 6, LocalDate.now()));
-		SongQueue q = j.getPlaylist();
+		ListModel q = j.getPlaylist();
 		
 		System.out.println("TEST: " + q.getElementAt(0));
 	}

@@ -169,7 +169,11 @@ public class SongLibrary implements TableModel {
 	 */
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		
 		ArrayList<Song> songsArrayList = fetchLibrary();
+		if (rowIndex < 0 || rowIndex >= songsArrayList.size()) {
+			return null;
+		}
 		Song currentSong = songsArrayList.get(rowIndex);
 		switch (columnIndex) {
 			case 0: return currentSong.getTitle();

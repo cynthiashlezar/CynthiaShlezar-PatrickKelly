@@ -220,12 +220,18 @@ public class Jukebox extends Observable {
 	/*
 	 * Returns the SongQueue in ListModel form for use by the view.
 	 */
-	public SongQueue getPlaylist() {
+	public ListModel<String> getPlaylist() {
 		return songQueue;
+		
 	}
 	
 	public TableModel getLibraryTable() {
 		return library;
+	}
+	
+	public String getUserSongsPlayed() {
+		// TODO Auto-generated method stub
+		return "" + currentAccount.getNumSongsPlayedToday();
 	}
 	
 
@@ -249,7 +255,7 @@ public class Jukebox extends Observable {
 	 * Added ListModel implementation so that the SongQueue object can be provided as a ListModel to
 	 * the view.
 	 */
-	public class SongQueue implements EndOfSongListener, ListModel {
+	public class SongQueue implements EndOfSongListener, ListModel<String> {
 		
 		ArrayList<SongRequest> requests;  // hold onto those SongRequests!
 		
@@ -307,9 +313,9 @@ public class Jukebox extends Observable {
 		}
 
 		@Override
-		public Object getElementAt(int index) {
+		public String getElementAt(int index) {
 			if (requests.isEmpty()) {
-				return null; // I guess I need to think about this case
+				return ""; // I guess I need to think about this case
 			}
 			return requests.get(index).toString();
 		}
@@ -338,6 +344,10 @@ public class Jukebox extends Observable {
 	
 
 	} // End private inner SongQueue class
+
+
+
+
 
 	
 }	// end Jukebox class

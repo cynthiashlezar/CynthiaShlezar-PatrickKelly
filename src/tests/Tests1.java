@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import javax.swing.ListModel;
 import javax.swing.table.TableModel;
 
 import org.junit.Test;
 
 import model.*;
 import model.Jukebox.SongQueue;
+import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
 
 public class Tests1 {
@@ -163,6 +165,12 @@ public class Tests1 {
 		assertEquals(SongSelection.SUCCESS, fancyDecider.canPlaySong(fred4, gaga2));
 		assertEquals(SongSelection.NO_PLAYS_REMAINING_SONG, fancyDecider.canPlaySong(fred5, gaga1));
 		assertEquals(SongSelection.NO_PLAYS_REMAINING_SONG, fancyDecider.canPlaySong(fred5, gaga2));
+	}
+	
+	@Test
+	public void testDeciderAndSongSelectionEnum4() {
+		Jukebox jukebox = new Jukebox();
+		assertEquals(SongSelection.NOT_LOGGED_IN, jukebox.requestSongFromMenu("Flute"));
 	}
 	
 	
@@ -312,9 +320,38 @@ public class Tests1 {
 		Jukebox j = new Jukebox();
 		File file = new File("extra_files/spacemusic.au");
 		j.addSongToQueue(new Song(file, "artist", "title", 6, LocalDate.now()));
-		SongQueue q = j.getPlaylist();
+		ListModel q = j.getPlaylist();
 		
 		System.out.println("TEST: " + q.getElementAt(0));
+	}
+	
+	@Test
+	public void testGetElementAt2() {
+		Jukebox j = new Jukebox();
+		ListModel q = j.getPlaylist();
+		
+		assertTrue(q.getElementAt(0).equals(""));
+	}
+	
+	@Test
+	public void testJukeboxMisc() {
+		Jukebox jukebox = new Jukebox();
+		jukebox.useCardReader("patrick", "kelly");
+		assertEquals(1500*60, jukebox.getUserCredit());
+		assertFalse(jukebox.getCurrentAccount().getName().equals("cynthia"));
+		assertTrue(jukebox.getCurrentAccount().getName().equals("patrick"));
+		
+	}
+	
+	@Test
+	public void testJukeboxMisc2() {
+		Jukebox jukebox = new Jukebox();
+		jukebox.useCardReader("patrick", "kelly");
+		ListModel lm = jukebox.getPlaylist();
+		lm.addListDataListener(null);
+		lm.removeListDataListener(null);
+		EndOfSongListener listener = jukebox.getSongQueueListener();
+		
 	}
 
 }
