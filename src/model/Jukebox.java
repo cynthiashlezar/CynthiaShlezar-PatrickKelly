@@ -308,6 +308,9 @@ public class Jukebox extends Observable {
 
 		@Override
 		public Object getElementAt(int index) {
+			if (requests.isEmpty()) {
+				return null; // I guess I need to think about this case
+			}
 			return requests.get(index).toString();
 		}
 
