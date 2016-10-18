@@ -287,7 +287,8 @@ public class Tests2 {
 	@Test
 	public void testGetElementAt() {
 		Jukebox j = new Jukebox();
-		//j.addSongToQueue();
+		File file = new File("extra_files/spacemusic.au");
+		j.addSongToQueue(new Song(file, "artist", "title", 6, LocalDate.now()));
 		SongQueue q = j.getPlaylist();
 		
 		System.out.println("TEST: " + q.getElementAt(0));
