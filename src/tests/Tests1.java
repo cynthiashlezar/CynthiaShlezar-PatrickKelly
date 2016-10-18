@@ -329,8 +329,28 @@ public class Tests1 {
 	public void testGetElementAt2() {
 		Jukebox j = new Jukebox();
 		ListModel q = j.getPlaylist();
+		Song gaga1 = new Song(new File("songfiles/flute.aif"), "Lady Gaga", "Telephone", 1, LocalDate.now());
+		Song bigPoppa = new Song(new File("songfiles/flute.aif"), "Biggie Smalls", "I Love It When They Call Me Big Poppa", 747474, LocalDate.now());
 		
 		assertTrue(q.getElementAt(0).equals(""));
+		
+		j.addSongToQueue(gaga1);
+		j.addSongToQueue(bigPoppa);
+		j.addSongToQueue(gaga1);
+		j.addSongToQueue(gaga1);
+		
+		System.out.println("testing get element at");
+		System.out.println(q.getElementAt(0));
+		System.out.println(q.getElementAt(1));
+		System.out.println(q.getElementAt(2));
+		System.out.println(q.getElementAt(3));
+		
+		assertTrue(q.getElementAt(0).equals("1 Telephone Lady Gaga"));
+		assertTrue(q.getElementAt(1).equals("747474 I Love It When They Call Me Big Poppa Biggie Smalls"));
+		assertTrue(q.getElementAt(2).equals("1 Telephone Lady Gaga"));
+		assertTrue(q.getElementAt(3).equals("1 Telephone Lady Gaga"));
+		
+		
 	}
 	
 	@Test
