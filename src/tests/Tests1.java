@@ -13,14 +13,16 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.swing.ListModel;
+import javax.swing.table.TableModel;
 
 import org.junit.Test;
 
 import model.*;
 import model.Jukebox.SongQueue;
+import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
 
-public class Tests2 {
+public class Tests1 {
 	
 	@Test
 	public void testSongLibrary1() {
@@ -165,6 +167,12 @@ public class Tests2 {
 		assertEquals(SongSelection.NO_PLAYS_REMAINING_SONG, fancyDecider.canPlaySong(fred5, gaga2));
 	}
 	
+	@Test
+	public void testDeciderAndSongSelectionEnum4() {
+		Jukebox jukebox = new Jukebox();
+		assertEquals(SongSelection.NOT_LOGGED_IN, jukebox.requestSongFromMenu("Flute"));
+	}
+	
 	
 	@Test
 	public void testJukeboxPrototype() throws InterruptedException {
@@ -285,16 +293,27 @@ public class Tests2 {
 		assertFalse(library.isCellEditable(0, 0));
 		
 	}
-
-
-//	@Test
-//	public void testGetElementAt() {
-//		Jukebox j = new Jukebox();
-//		j.addSongToQueue(j.library.getSong("Tada"));
-//		SongQueue q = j.getPlaylist();
-//		
-//		System.out.println("TEST: " + q.getElementAt(0));
-//	}
+	
+	@Test
+	public void testTableModelBusiness2() {
+		Jukebox jukebox = new Jukebox();
+		TableModel tm = jukebox.getLibraryTable();
+		assertEquals(String.class, tm.getColumnClass(0));
+		assertEquals(String.class, tm.getColumnClass(1));
+		assertEquals(String.class, tm.getColumnClass(2));
+		assertEquals(3, tm.getColumnCount());
+		assertTrue(tm.getColumnName(0).equals("Title"));
+		assertTrue(tm.getColumnName(1).equals("Artist"));
+		assertTrue(tm.getColumnName(2).equals("Seconds"));
+		assertEquals(9, tm.getRowCount());
+		System.out.println(tm.getValueAt(0, 0));
+		assertTrue(tm.getValueAt(8,1).equals("Pierre Langer"));
+		assertTrue(tm.getValueAt(5, 2).equals("15"));
+		assertNull(tm.getValueAt(0, 5));
+		assertNull(tm.getColumnName(3));
+		assertFalse(tm.isCellEditable(0, 0));
+		
+	}
 
 	@Test
 	public void testGetElementAt() {
@@ -304,6 +323,55 @@ public class Tests2 {
 		ListModel q = j.getPlaylist();
 		
 		System.out.println("TEST: " + q.getElementAt(0));
+	}
+	
+	@Test
+	public void testGetElementAt2() {
+		Jukebox j = new Jukebox();
+		ListModel q = j.getPlaylist();
+		Song gaga1 = new Song(new File("songfiles/flute.aif"), "Lady Gaga", "Telephone", 1, LocalDate.now());
+		Song bigPoppa = new Song(new File("songfiles/flute.aif"), "Biggie Smalls", "I Love It When They Call Me Big Poppa", 747474, LocalDate.now());
+		
+		assertTrue(q.getElementAt(0).equals(""));
+		
+		j.addSongToQueue(gaga1);
+		j.addSongToQueue(bigPoppa);
+		j.addSongToQueue(gaga1);
+		j.addSongToQueue(gaga1);
+		
+		System.out.println("testing get element at");
+		System.out.println(q.getElementAt(0));
+		System.out.println(q.getElementAt(1));
+		System.out.println(q.getElementAt(2));
+		System.out.println(q.getElementAt(3));
+		
+		assertTrue(q.getElementAt(0).equals("1 Telephone Lady Gaga"));
+		assertTrue(q.getElementAt(1).equals("747474 I Love It When They Call Me Big Poppa Biggie Smalls"));
+		assertTrue(q.getElementAt(2).equals("1 Telephone Lady Gaga"));
+		assertTrue(q.getElementAt(3).equals("1 Telephone Lady Gaga"));
+		
+		
+	}
+	
+	@Test
+	public void testJukeboxMisc() {
+		Jukebox jukebox = new Jukebox();
+		jukebox.useCardReader("patrick", "kelly");
+		assertEquals(1500*60, jukebox.getUserCredit());
+		assertFalse(jukebox.getCurrentAccount().getName().equals("cynthia"));
+		assertTrue(jukebox.getCurrentAccount().getName().equals("patrick"));
+		
+	}
+	
+	@Test
+	public void testJukeboxMisc2() {
+		Jukebox jukebox = new Jukebox();
+		jukebox.useCardReader("patrick", "kelly");
+		ListModel lm = jukebox.getPlaylist();
+		lm.addListDataListener(null);
+		lm.removeListDataListener(null);
+		EndOfSongListener listener = jukebox.getSongQueueListener();
+		
 	}
 
 }

@@ -36,7 +36,7 @@ public class QueueView extends JPanel implements Observer {
 		//setBackground(Color.BLACK);
 		
 		this.system = system;
-		this.queue = system.getPlaylist();
+		this.queue = (SongQueue) system.getPlaylist();
 
 		
 //		DefaultListModel<String> listModel = new DefaultListModel<>();
@@ -68,7 +68,7 @@ public class QueueView extends JPanel implements Observer {
 		for(int i = 0; i < queue.getSize(); i++) {
 			System.out.println("\t\t\t" + queue.getElementAt(i));
 		}
-		queue = system.getPlaylist();
+		queue = (SongQueue) system.getPlaylist();
 		list.setModel(queue);
 			
 	}
