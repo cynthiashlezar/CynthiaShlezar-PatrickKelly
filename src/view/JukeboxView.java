@@ -34,7 +34,7 @@ public class JukeboxView extends JPanel implements Observer {
 		
 		this.setLayout(null);
 		
-		library = new LibraryView(350, 375, system);
+		library = new LibraryView(520, 375, system);
 		library.setLocation(25, 25);
 		this.add(library);
 		system.addObserver(library);
@@ -52,8 +52,8 @@ public class JukeboxView extends JPanel implements Observer {
 		this.add(loginScreen);
 		system.addObserver(loginScreen);	
 		
-		queue = new QueueView(350, 750, system);
-		queue.setLocation(375, 25);
+		queue = new QueueView(300, 375, system);
+		queue.setLocation(600, 25);
 		this.add(queue);
 		system.addObserver(queue);
 

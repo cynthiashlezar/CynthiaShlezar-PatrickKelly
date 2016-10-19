@@ -79,7 +79,7 @@ public class UserLogin extends JPanel implements Observer {
 		this.add(statusLabel);
 		this.add(status);
 
-		
+		update(system, null);
 	}
 	
 	
@@ -102,6 +102,8 @@ public class UserLogin extends JPanel implements Observer {
 				+ ((system.getUserCredit()/60)%60) + ":"
 				+ ((system.getUserCredit()))%60);
 		}
+		validate();
+		repaint();
 		
 	}
 	

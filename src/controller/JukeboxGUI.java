@@ -48,7 +48,7 @@ public class JukeboxGUI extends JFrame {
 	
 	private Jukebox jukebox;
 	private JukeboxView view;
-	private static final int width = 800;
+	private static final int width = 1000;
 	private static final int height = 600;
 	private WindowHandler handler;
 	

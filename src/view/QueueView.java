@@ -33,7 +33,7 @@ public class QueueView extends JPanel implements Observer {
 		
 		
 		setSize(width, height);
-		//setBackground(Color.BLACK);
+		setBackground(Color.WHITE);
 		
 		this.system = system;
 		this.queue = system.getPlaylist();
@@ -55,8 +55,8 @@ public class QueueView extends JPanel implements Observer {
 		
 		
 		this.add(list);
-		JScrollPane scroll = new JScrollPane(list);
-		this.add(scroll);
+		//JScrollPane scroll = new JScrollPane(list);
+		//this.add(scroll);
 	}
 	
 

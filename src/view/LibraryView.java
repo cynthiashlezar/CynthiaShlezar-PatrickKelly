@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
@@ -39,6 +40,7 @@ public class LibraryView extends JPanel implements Observer {
 		table = new JTable(model);
 		table.setSize(width - 50, height);
 		table.setLocation(0, 0);
+		table.setBackground(Color.WHITE);
 		songList.add(table);
 		
 		
@@ -56,7 +58,7 @@ public class LibraryView extends JPanel implements Observer {
 		table.setRowSorter(tableRowSorter);
 		JButton selectSong = new JButton("->");
 		selectSong.setSize(45, 45);
-		selectSong.setLocation(295, height/2 - 45);
+		selectSong.setLocation(465, height/2 - 45);
 		
 		this.add(selectSong);
 		selectSong.addActionListener(new ButtonListener());
