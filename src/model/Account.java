@@ -35,9 +35,10 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Account {
+public class Account implements Serializable {
 	
 	String name;					//username login
 	String password;				//password for login

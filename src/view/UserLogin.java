@@ -94,10 +94,18 @@ public class UserLogin extends JPanel implements Observer {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		status.setText("Played: " + system.getCurrentAccount().getNumSongsPlayedToday()
-				+ " Credit: " + (system.getCurrentAccount().getCreditAvailable()/60)/60 + ":"
-				+ ((system.getCurrentAccount().getCreditAvailable()/60)%60) + ":"
-				+ ((system.getCurrentAccount().getCreditAvailable()))%60);
+//		status.setText("Played: " + system.getCurrentAccount().getNumSongsPlayedToday()
+//				+ " Credit: " + (system.getCurrentAccount().getCreditAvailable()/60)/60 + ":"
+//				+ ((system.getCurrentAccount().getCreditAvailable()/60)%60) + ":"
+//				+ ((system.getCurrentAccount().getCreditAvailable()))%60);
+		if (system.printUsername() == "") {
+			status.setText("Please log in.");
+		} else {
+			status.setText("Played: " + system.getUserSongsPlayed()
+				+ " Credit: " + (system.getUserCredit()/60)/60 + ":"
+				+ ((system.getUserCredit()/60)%60) + ":"
+				+ ((system.getUserCredit()))%60);
+		}
 		
 	}
 	

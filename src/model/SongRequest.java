@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 import songplayer.EndOfSongListener;
 import songplayer.SongPlayer;
 
@@ -20,7 +22,7 @@ import songplayer.SongPlayer;
  * and uses the SongPlayer class to play the song.
  */
 
-public class SongRequest {
+public class SongRequest implements Serializable {
 	
 	EndOfSongListener listener;
 	String fileName;  // the file name of the song; this is needed by SongPlayer.

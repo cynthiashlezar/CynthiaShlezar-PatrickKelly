@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /*
  * class CardReader.  
  * 
@@ -12,7 +14,7 @@ package model;
  * Section:  Miranda's
  */
 
-public class CardReader {
+public class CardReader implements Serializable {
 	
 	private AccountCollection accounts; // creates and holds the account collection
 	

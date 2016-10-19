@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /*
@@ -16,7 +17,7 @@ import java.time.LocalDate;
  * Section:  Miranda's
  */
 
-public class Song {
+public class Song implements Serializable {
 
 	private File file;
 	private String artist, title;

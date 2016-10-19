@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -305,6 +307,9 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 		
 	}
+
+
+
 	
 	
 

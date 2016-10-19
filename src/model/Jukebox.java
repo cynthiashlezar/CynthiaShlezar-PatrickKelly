@@ -31,7 +31,7 @@ import songplayer.SongPlayer;
  * Course: CSC 335 (Fall '16)
  */
 
-public class Jukebox extends Observable {
+public class Jukebox extends Observable implements Serializable {
 	
 	private CardReader authenticator;
 	private Decider decider;
@@ -235,6 +235,16 @@ public class Jukebox extends Observable {
 		return "" + currentAccount.getNumSongsPlayedToday();
 	}
 	
+	
+	public void homeMadeNotify() {
+		if (songQueue.getSize() != 0) {
+			songQueue.executeZerothSong();
+		}
+		setChanged();
+		notifyObservers();
+		
+	}
+	
 
 
 //                            public outer Jukebox class above
@@ -256,7 +266,7 @@ public class Jukebox extends Observable {
 	 * Added ListModel implementation so that the SongQueue object can be provided as a ListModel to
 	 * the view.
 	 */
-	public class SongQueue implements EndOfSongListener, ListModel<String> {
+	public class SongQueue implements EndOfSongListener, ListModel<String>, Serializable {
 		
 		ArrayList<SongRequest> requests;  // hold onto those SongRequests!
 		
@@ -300,7 +310,7 @@ public class Jukebox extends Observable {
 		 */
 		@Override
 		public void songFinishedPlaying(EndOfSongEvent eventWithFileNameAndDateFinished) {
-			// System.out.println("got EndOfSongEvent message...");
+			System.out.println("got EndOfSongEvent message...");
 			requests.remove(0);
 			// setCurrentSong(null);    currentSong isn't used any more, but just commenting out for now.
 			if (! requests.isEmpty()) {
@@ -341,6 +351,12 @@ public class Jukebox extends Observable {
 				songs.add(requests.get(i).getSong());
 			}
 			return songs;
+		}
+		
+		public void executeZerothSong() {
+			if (requests.size() != 0) {
+				requests.get(0).execute();
+			}
 		}
 		
 		 

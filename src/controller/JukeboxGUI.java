@@ -29,7 +29,17 @@
  */
 package controller;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import model.Jukebox;
 import view.JukeboxView;
@@ -40,6 +50,7 @@ public class JukeboxGUI extends JFrame {
 	private JukeboxView view;
 	private static final int width = 800;
 	private static final int height = 600;
+	private WindowHandler handler;
 	
 	public JukeboxGUI() {
 		setup();
@@ -60,8 +71,29 @@ public class JukeboxGUI extends JFrame {
 	 * Return: none
 	 */
 	
-	private void setup() {
-		jukebox = new Jukebox();
+	private void setup()  {
+		handler = new WindowHandler();
+		this.addWindowListener(handler);
+		int loadQuestion = JOptionPane.showConfirmDialog(null, "Do you want to load the business?", "Load?", JOptionPane.YES_NO_OPTION);
+		if (loadQuestion == JOptionPane.YES_OPTION) {
+			try {
+				FileInputStream fileIn = new FileInputStream("extra_files/savestate.ser");
+				ObjectInputStream in = new ObjectInputStream(fileIn);
+				jukebox = (Jukebox) in.readObject();
+				in.close();
+				fileIn.close();
+				jukebox.homeMadeNotify();
+			} catch (IOException i) {
+				System.out.println("couldn't open file");
+				i.printStackTrace();
+				
+			} catch (ClassNotFoundException e) {
+				System.out.println("No jukebox in here");
+				e.printStackTrace();
+			}
+		} else {
+			jukebox = new Jukebox();
+		} 
 		view = new JukeboxView(jukebox);
 		addAllObservers();
 		add(view);
@@ -95,8 +127,73 @@ public class JukeboxGUI extends JFrame {
 	 */
 	
 	public static void main(String [] args) {
+		
 		JukeboxGUI g = new JukeboxGUI();
 		g.setVisible(true);
+	}
+	
+	private class WindowHandler implements WindowListener {
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			// TODO Auto-generated method stub
+			int reply = JOptionPane.showConfirmDialog(null, "Do you want to save the business?", "Save?", JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.YES_OPTION) {
+				// save things
+				try {
+					System.out.println("closing");
+					FileOutputStream fileOut = new FileOutputStream("extra_files/savestate.ser");
+					ObjectOutputStream out = new ObjectOutputStream(fileOut);
+					out.writeObject(jukebox);
+					out.close();
+					fileOut.close();
+				} catch (IOException exception) {
+					System.out.println("You couldn't save to an outpult file.  WAH WAH.");
+					exception.printStackTrace();
+				}
+			} else {
+				System.exit(0);
+			}
+			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+			
+		}
+		
 	}
 
 }

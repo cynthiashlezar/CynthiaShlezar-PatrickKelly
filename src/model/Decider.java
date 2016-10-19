@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /*
  * Class: Decider
  * 
@@ -16,7 +18,7 @@ package model;
  * Section:  Miranda's
  */
 
-public class Decider {
+public class Decider implements Serializable {
 	
 	private int songsPerDayPerPerson;      // the number of songs a person can play per day
 	private int numTimesPlayedPermissible; // the number of times per day a song may be played
