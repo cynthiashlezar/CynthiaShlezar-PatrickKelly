@@ -10,12 +10,14 @@ import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.RowSorter;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -35,6 +37,7 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 	private JPanel emptyPanel;
 	private ButtonListener listener;
 	
+	//selector panel stuff
 	private JButton songSelector;
 	
 	//login stuff
@@ -48,6 +51,10 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 	//library stuff
 	private TableModel model;
 	private JTable table;
+	
+	// JList stuff
+	private ListModel<String> listModel;
+	private JList<String> list;
 	
 	
 	
@@ -93,7 +100,6 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 
 	private void setUpStatusPanel() {
-		// TODO Auto-generated method stub
 		
 		
 		statusPanel.setLayout(new GridLayout(2, 1));
@@ -113,7 +119,6 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 
 	private void setUpLoginPanel() {
-		// TODO Auto-generated method stub
 		
 		loginPanel.setVisible(true);
 		loginPanel.setLayout(new GridLayout(3, 2));
@@ -127,8 +132,8 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 		
 
 		
-		loginButton.addActionListener(listener);
-		signoutButton.addActionListener(listener);
+		loginButton.addActionListener(new ButtonListener());
+		signoutButton.addActionListener(new ButtonListener());
 		
 		loginPanel.add(accLabel);
 		loginPanel.add(accField);
@@ -145,7 +150,6 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 
 	private void setUpEmpty() {
-		// TODO Auto-generated method stub
 		this.add(emptyPanel);
 		
 	}
@@ -153,7 +157,6 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 
 	private void setUpSelector() {
-		// TODO Auto-generated method stub
 		
 		selectorPanel.setLayout(new BorderLayout());
 		
@@ -173,6 +176,14 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 	private void setUpQueue() {
 		// TODO Auto-generated method stub
 		
+		queuePanel.setLayout(new BorderLayout());
+		
+		listModel = jukebox.getPlaylist();
+		
+		list = new JList(listModel);
+		
+		queuePanel.add(list);
+		
 		this.add(queuePanel);
 		
 	}
@@ -180,7 +191,6 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 
 	private void setUpLibrary() {
-		// TODO Auto-generated method stub
 		libraryPanel.setLayout(new BorderLayout());
 		
 		model = jukebox.getLibraryTable();
@@ -205,20 +215,21 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		{
-			if (jukebox.printUsername() == "") {
-				status.setText("Please log in.");
-			} else {
-				status.setText(jukebox.printUsername() + " logged in.\n" + 
-						"Played: " + jukebox.getUserSongsPlayed()
-					+ " Credit: " + (jukebox.getUserCredit()/60)/60 + ":"
-					+ ((jukebox.getUserCredit()/60)%60) + ":"
-					+ ((jukebox.getUserCredit()))%60);
-			}
-			
-		}
 		
+		listModel = jukebox.getPlaylist();
+		list = new JList<String>(listModel);
+		queuePanel.add(list);
+
+		if (jukebox.printUsername() == "") {
+			statusLabel.setText("Status:  Not logged in.");
+			status.setText("Please log in.");
+		} else {
+			statusLabel.setText("Status: " + jukebox.printUsername() + " logged in.");
+			status.setText("Played: " + jukebox.getUserSongsPlayed()
+			+ " Credit: " + (jukebox.getUserCredit()/60)/60 + ":"
+			+ ((jukebox.getUserCredit()/60)%60) + ":"
+			+ ((jukebox.getUserCredit()))%60);
+		}
 	}
 	
 	
@@ -227,12 +238,14 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
 			JButton buttonClicked = (JButton) e.getSource();
 			
+			System.out.println("any button pressed!!");
 			
 			// login button
 			if(buttonClicked.getText().equals("Log in")) {
+				
+				System.out.println("login button pressed!!");
 
 				StringBuilder pass = new StringBuilder();
 				pass.append(passField.getPassword());
