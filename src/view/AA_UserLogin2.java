@@ -143,15 +143,6 @@ public class AA_UserLogin2 extends JPanel implements Observer {
 					JOptionPane.showMessageDialog(null, "Incorrect Username or Password!");
 					
 				}
-//				else {
-//					status.setText("User: " + system.printUsername() +
-//							" Credit:" + system.getUserCredit()/60/60 + " hours");
-//				}
-				// to clear out fields
-				// accField.setText("");
-				// passField.setText("");
-				//
-				//update(system, null);
 
 			}
 			

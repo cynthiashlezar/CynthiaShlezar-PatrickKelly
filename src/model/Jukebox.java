@@ -187,9 +187,9 @@ public class Jukebox extends Observable implements Serializable {
 	 * Commenting this method out for now to see if we can get by without returning the
 	 * whole account object to the view.
 	 */
-	public Account getCurrentAccount() {
-		return currentAccount;
-	}
+//	public Account getCurrentAccount() {
+//		return currentAccount;
+//	}
 	
 	/*
 	 * Logs out the current user.  (Used by the view).

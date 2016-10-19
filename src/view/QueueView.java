@@ -25,7 +25,7 @@ public class QueueView extends JPanel implements Observer {
 	 * call update in jukebox, any time a song finishes
 	 */
 	private Jukebox system;
-	private SongQueue queue;
+	private ListModel queue;
 	private JList list;
 
 	public QueueView(int width, int height, Jukebox system) {
@@ -36,7 +36,7 @@ public class QueueView extends JPanel implements Observer {
 		//setBackground(Color.BLACK);
 		
 		this.system = system;
-		this.queue = (SongQueue) system.getPlaylist();
+		this.queue = system.getPlaylist();
 
 		
 //		DefaultListModel<String> listModel = new DefaultListModel<>();
@@ -70,6 +70,14 @@ public class QueueView extends JPanel implements Observer {
 		}
 		queue = (SongQueue) system.getPlaylist();
 		list.setModel(queue);
+		
+		remove(list);
+		queue = system.getPlaylist();
+		list = new JList<String>(queue);
+		add(list);
+		
+		validate();
+		repaint();
 			
 	}
 

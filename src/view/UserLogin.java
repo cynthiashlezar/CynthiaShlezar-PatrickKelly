@@ -94,10 +94,6 @@ public class UserLogin extends JPanel implements Observer {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-//		status.setText("Played: " + system.getCurrentAccount().getNumSongsPlayedToday()
-//				+ " Credit: " + (system.getCurrentAccount().getCreditAvailable()/60)/60 + ":"
-//				+ ((system.getCurrentAccount().getCreditAvailable()/60)%60) + ":"
-//				+ ((system.getCurrentAccount().getCreditAvailable()))%60);
 		if (system.printUsername() == "") {
 			status.setText("Please log in.");
 		} else {
@@ -131,14 +127,15 @@ public class UserLogin extends JPanel implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			JButton buttonClicked = (JButton) e.getSource();
+JButton buttonClicked = (JButton) e.getSource();
 			
 			if(buttonClicked.getText().equals("Log in")) {
 
 				StringBuilder pass = new StringBuilder();
 				pass.append(passField.getPassword());
 				
-				if(system.getCurrentAccount() != null) {
+				
+				if(! system.printUsername().equals("")) {
 					JOptionPane.showMessageDialog(null, "Someone's already logged in!");
 				}
 				else if(!system.useCardReader(accField.getText(), pass.toString())){
@@ -146,23 +143,47 @@ public class UserLogin extends JPanel implements Observer {
 					JOptionPane.showMessageDialog(null, "Incorrect Username or Password!");
 					
 				}
-				else {
-					status.setText("User:" + system.getCurrentAccount().getName() +
-							" Credit:" + system.getCurrentAccount().getCreditAvailable()/60/60 + " hours");
-				}
-				update(system, null);
 
 			}
 			
 			if(buttonClicked.getText().equals("Sign out")) {
-				if(system.getCurrentAccount() == null)
-					JOptionPane.showMessageDialog(null, "There was no one logged in!");
 				system.removeCurrentAccount();
-				status.setText("Not logged in");
-				update(system, null);
 			}
 			
 			
+			
+//			JButton buttonClicked = (JButton) e.getSource();
+//			
+//			if(buttonClicked.getText().equals("Log in")) {
+//
+//				StringBuilder pass = new StringBuilder();
+//				pass.append(passField.getPassword());
+//				
+//				if(system.getCurrentAccount() != null) {
+//					JOptionPane.showMessageDialog(null, "Someone's already logged in!");
+//				}
+//				else if(!system.useCardReader(accField.getText(), pass.toString())){
+//					
+//					JOptionPane.showMessageDialog(null, "Incorrect Username or Password!");
+//					
+//				}
+//				else {
+//					status.setText("User:" + system.getCurrentAccount().getName() +
+//							" Credit:" + system.getCurrentAccount().getCreditAvailable()/60/60 + " hours");
+//				}
+//				update(system, null);
+//
+//			}
+//			
+//			if(buttonClicked.getText().equals("Sign out")) {
+//				if(system.getCurrentAccount() == null)
+//					JOptionPane.showMessageDialog(null, "There was no one logged in!");
+//				system.removeCurrentAccount();
+//				status.setText("Not logged in");
+//				update(system, null);
+//			}
+//			
+//			
 		} 
 		
 	}

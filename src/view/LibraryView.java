@@ -66,20 +66,42 @@ public class LibraryView extends JPanel implements Observer {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			SongSelection truth = SongSelection.FAILURE;
 			
-			if (system.getCurrentAccount() == null) {
+SongSelection truth = SongSelection.FAILURE;
+			
+			if (system.printUsername().equals("")) {
 				JOptionPane.showMessageDialog(null, "Log in first.");
 				return;
 			}
 			
-			System.out.println("***Song to be requested: " + (String) table.getValueAt(table.getSelectedRow(), 0));
+			if (table.getSelectedRow() < 0 || table.getSelectedRow() >= model.getRowCount()) {
+				JOptionPane.showMessageDialog(null, "How can I play a song if you don't select one?  I don't even know how long that would take.");
+				return;
+			}
+
+			
 			truth = system.requestSongFromMenu((String) table.getValueAt(table.getSelectedRow(), 0));
+			
+			
 			
 			if(truth != SongSelection.SUCCESS) {
 				JOptionPane.showMessageDialog(null, "You can't play the song!");
 			}
 			update(system, null);
+//			SongSelection truth = SongSelection.FAILURE;
+//			
+//			if (system.getCurrentAccount() == null) {
+//				JOptionPane.showMessageDialog(null, "Log in first.");
+//				return;
+//			}
+//			
+//			System.out.println("***Song to be requested: " + (String) table.getValueAt(table.getSelectedRow(), 0));
+//			truth = system.requestSongFromMenu((String) table.getValueAt(table.getSelectedRow(), 0));
+//			
+//			if(truth != SongSelection.SUCCESS) {
+//				JOptionPane.showMessageDialog(null, "You can't play the song!");
+//			}
+//			update(system, null);
 		}
 		
 	}
