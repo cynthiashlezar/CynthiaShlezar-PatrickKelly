@@ -11,6 +11,7 @@
 package view;
 
 
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.Observable;
 import java.util.Observer;
@@ -34,6 +35,17 @@ public class JukeboxView extends JPanel implements Observer {
 		
 		this.setLayout(null);
 		
+		Font myFont = new Font("Arial", Font.TRUETYPE_FONT, 20);
+		
+		JLabel libraryTitle = new JLabel();
+		libraryTitle.setText("Library: Pick a Song");
+		libraryTitle.setLocation(25, -12);
+		libraryTitle.setFont(myFont);
+		libraryTitle.setSize(300,50);
+
+		
+		this.add(libraryTitle);
+		
 		library = new LibraryView(520, 375, system);
 		library.setLocation(25, 25);
 		this.add(library);
@@ -51,6 +63,14 @@ public class JukeboxView extends JPanel implements Observer {
 		loginScreen.setSize(350, 125);
 		this.add(loginScreen);
 		system.addObserver(loginScreen);	
+		
+		
+		JLabel upNext = new JLabel();
+		upNext.setText("Playlist");
+		upNext.setLocation(600, -12);
+		upNext.setFont(myFont);
+		upNext.setSize(300,50);
+		this.add(upNext);
 		
 		queue = new QueueView(300, 375, system);
 		queue.setLocation(600, 25);
