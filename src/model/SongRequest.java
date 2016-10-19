@@ -64,7 +64,10 @@ public class SongRequest implements Serializable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "" + song.getLength() + " " + song.getTitle() + " by " + song.getArtist();
+		int length = song.getLength();
+		int minutes = (length/60)%60;
+		int seconds = length%60;
+		return "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + " " + song.getTitle() + " by " + song.getArtist();
 	}
 	
 	/*

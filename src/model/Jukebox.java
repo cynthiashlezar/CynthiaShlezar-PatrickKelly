@@ -195,7 +195,12 @@ public class Jukebox extends Observable implements Serializable {
 		return "" + currentAccount.getNumSongsPlayedToday();
 	}
 	
-	
+	/*
+	 * This method is called by the GUI when the system begins.  It causes the
+	 * jukebox to tell its Observers to update themselves.  Also, if there
+	 * is a song in the queue, it executes the songRequest object, starting the cycle
+	 * of playing the songs again.
+	 */
 	public void homeMadeNotify() {
 		if (songQueue.getSize() != 0) {
 			songQueue.executeZerothSong();
@@ -314,12 +319,12 @@ public class Jukebox extends Observable implements Serializable {
 
 		@Override
 		public void addListDataListener(ListDataListener l) {
-			//nothing
+			//nothing.  Not used in our program.
 		}
 
 		@Override
 		public void removeListDataListener(ListDataListener l) {
-			//nothing	
+			//nothing	Not used in our program.
 		} 
 		
 
