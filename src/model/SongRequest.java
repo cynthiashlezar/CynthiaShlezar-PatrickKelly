@@ -54,14 +54,22 @@ public class SongRequest implements Serializable {
 	}
 	
 	/*
+	 * This toString() method provides a String representation of the SongRequest object.
+	 * Used to display info about the queue of songs in the GUI's play list.
+	 * 
+	 * Returns a String.
+	 * 
 	 * TODO: remember to think about formatting seconds into MM:SS
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "" + song.getLength() + " " + song.getTitle() + " " + song.getArtist();
+		return "" + song.getLength() + " " + song.getTitle() + " by " + song.getArtist();
 	}
 	
+	/*
+	 * Returns the Song object associated with the SongRequest objecct.
+	 */
 	public Song getSong() {
 		return song;
 	}

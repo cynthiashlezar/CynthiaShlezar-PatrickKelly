@@ -119,6 +119,9 @@ public class Song implements Serializable {
 		}
 	}
 
+	/*
+	 * Returns the filename associated with the Song object.  (As a String.)
+	 */
 	public String getFileName() {
 		return file.getName();
 	}

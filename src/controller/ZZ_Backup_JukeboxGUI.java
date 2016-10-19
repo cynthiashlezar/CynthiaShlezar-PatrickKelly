@@ -32,7 +32,7 @@ import javax.swing.table.TableRowSorter;
 import model.Jukebox;
 import model.SongSelection;
 
-public class BB_JukeboxGUI3 extends JFrame implements Observer {
+public class ZZ_Backup_JukeboxGUI extends JFrame implements Observer {
 	
 	
 	private Jukebox jukebox;
@@ -68,7 +68,7 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 	
 	
 	
-	public BB_JukeboxGUI3() {
+	public ZZ_Backup_JukeboxGUI() {
 		
 		handler = new WindowHandler();
 		this.addWindowListener(handler);
@@ -122,7 +122,7 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 	}
 	
 	public static void main(String [] args) {
-		BB_JukeboxGUI3 g = new BB_JukeboxGUI3();
+		ZZ_Backup_JukeboxGUI g = new ZZ_Backup_JukeboxGUI();
 		g.setVisible(true);
 	}
 

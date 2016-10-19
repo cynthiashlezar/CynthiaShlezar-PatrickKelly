@@ -136,21 +136,6 @@ public class Jukebox extends Observable implements Serializable {
 		return currentSongTitle;
 	}
 	
-	/*
-	 * This method sets the currentSong variable to reflect the song currently
-	 * being played by the jukebox.  Notifies observers so that they can
-	 * update.
-	 * 
-	 * Used by a SongRequest object when it executes.
-	 * 
-	 * Not really needed, since we're not displaying anything based on the currentSong
-	 * variable.  Commenting out.
-	 */
-//	public void setCurrentSong(Song song) {
-//		currentSong = song;
-//		setChanged();
-//		notifyObservers();
-//	}
 	
 	/*
 	 * Returns the SongQueue object, which listens for the end of a song before
@@ -165,31 +150,6 @@ public class Jukebox extends Observable implements Serializable {
 		return songQueue;
 	}
 	
-//	/*
-//	 * Returns an ArrayList containing all the songs in the SongLibrary.  Used
-//	 * by the view to be able to list the songs.
-//	 */
-//	public ArrayList<Song> fetchLibrary() {
-//		
-//		ArrayList<Song> songs = new ArrayList<>();
-//		
-//		for(Map.Entry<String, Song> entry : this.library.retrieveTitles().entrySet()) {
-//			Song song = entry.getValue();
-//			songs.add(song);
-//		}
-//		return songs;	
-//	}
-
-	/*
-	 * Used by the view to display information regarding the current user.
-	 * Returns an Account object.
-	 * 
-	 * Commenting this method out for now to see if we can get by without returning the
-	 * whole account object to the view.
-	 */
-//	public Account getCurrentAccount() {
-//		return currentAccount;
-//	}
 	
 	/*
 	 * Logs out the current user.  (Used by the view).
@@ -320,11 +280,30 @@ public class Jukebox extends Observable implements Serializable {
 			notifyObservers();
 		}
 
+		/*
+		 * The methods below are for implementing the ListModel interface.  getSize()
+		 * and getElementAt() are the only methods required for our purposes.
+		 * 
+		 * getSize() returns the size on the queue.
+		 * 
+		 * (non-Javadoc)
+		 * @see javax.swing.ListModel#getSize()
+		 */
 		@Override
 		public int getSize() {
 			return requests.size();
 		}
 
+		/*
+		 * getElementAt() returns a string representation of the SongRequest
+		 * object in the given index of the SongQueue.
+		 * 
+		 * @param:   integer (the index of the desired element)
+		 * @returns: a String
+		 * 
+		 * (non-Javadoc)
+		 * @see javax.swing.ListModel#getElementAt(int)
+		 */
 		@Override
 		public String getElementAt(int index) {
 			if (requests.size() == 0) {
@@ -344,31 +323,30 @@ public class Jukebox extends Observable implements Serializable {
 		} 
 		
 
-		public ArrayList<Song> getSongQueue() {
-			
-			ArrayList<Song> songs = new ArrayList<>();
-			for(int i = 0; i < requests.size(); i++) {
-				songs.add(requests.get(i).getSong());
-			}
-			return songs;
-		}
+//		public ArrayList<Song> getSongQueue() {
+//			
+//			ArrayList<Song> songs = new ArrayList<>();
+//			for(int i = 0; i < requests.size(); i++) {
+//				songs.add(requests.get(i).getSong());
+//			}
+//			return songs;
+//		}
 		
+		/*
+		 * This method is used when loading a saved jukebox state.  It executes the song
+		 * request in index 0 of the queue so that the cycle of playing songs resumes
+		 * without having to add an additional song to the queue.
+		 */
 		public void executeZerothSong() {
 			if (requests.size() != 0) {
 				requests.get(0).execute();
 			}
 		}
 		
-		 
-	
 
 	} // End private inner SongQueue class
 
 
-
-
-
-	
 }	// end Jukebox class
 
 

@@ -18,6 +18,10 @@ public class CardReader implements Serializable {
 	
 	private AccountCollection accounts; // creates and holds the account collection
 	
+	/* Constructor
+	 * 
+	 * Gets a reference to the singleton AccountCollection object
+	 */
 	public CardReader() {
 		accounts = AccountCollection.getInstance();
 	}

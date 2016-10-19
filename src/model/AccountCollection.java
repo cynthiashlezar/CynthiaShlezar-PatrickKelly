@@ -47,12 +47,20 @@ public class AccountCollection implements Serializable {
 	private HashMap<String, Account> accounts;
 	private static AccountCollection self;
 	
+	/*
+	 * Private constructor (because we're using the Singleton pattern and
+	 * only ever want one instance of this object.)
+	 */
 	private AccountCollection() {
 		
 		//initializes accounts, and adds things to it from a file
 		createAllAccounts(); 
 	}
 	
+	/*
+	 * Gets a reference to the single AccountCollection object (and calls the constructor
+	 * if the instance has not been created.)
+	 */
 	public static synchronized AccountCollection getInstance() {
 		if (self == null) {
 			self = new AccountCollection();
