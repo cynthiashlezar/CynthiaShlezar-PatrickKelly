@@ -218,7 +218,15 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 		
 		listModel = jukebox.getPlaylist();
 		list = new JList<String>(listModel);
+		list.setModel(listModel);
 		queuePanel.add(list);
+		list.setModel(listModel);
+		
+		System.out.println("update the queue gui!!");
+		System.out.println("\t\tThings in the queue: ");
+		for(int i = 0; i < listModel.getSize(); i++) {
+			System.out.println("\t\t\t" + listModel.getElementAt(i));
+		}
 
 		if (jukebox.printUsername() == "") {
 			statusLabel.setText("Status:  Not logged in.");

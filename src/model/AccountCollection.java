@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -41,14 +42,23 @@ import java.util.StringTokenizer;
  * in a HashMap.  (The key to the HashMap being username.)  Contains methods to create accounts, see
  * whether an account exists, and return account objects.
  */
-public class AccountCollection {
+public class AccountCollection implements Serializable {
 
-	HashMap<String, Account> accounts;
+	private HashMap<String, Account> accounts;
+	private static AccountCollection self;
 	
-	public AccountCollection() {
+	private AccountCollection() {
 		
 		//initializes accounts, and adds things to it from a file
 		createAllAccounts(); 
+	}
+	
+	public static synchronized AccountCollection getInstance() {
+		if (self == null) {
+			self = new AccountCollection();
+		}
+		return self;
+		
 	}
 	
 	/*

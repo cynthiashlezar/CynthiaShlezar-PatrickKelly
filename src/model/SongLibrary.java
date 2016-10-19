@@ -11,6 +11,7 @@ import javax.swing.table.TableModel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /*
@@ -31,16 +32,24 @@ import java.time.LocalDate;
  * folder of the project.
  */
 
-public class SongLibrary implements TableModel {
+public class SongLibrary implements TableModel, Serializable {
 	
 	private TreeMap<String, Song> library;
+	private static SongLibrary self;
 	
 	/*
 	 * Constructor.  Requires a filename.  Assumes this file is in the "extra_files" folder.
 	 */
-	public SongLibrary(String songsFileName) {
+	private SongLibrary(String songsFileName) {
 		library = new TreeMap<String, Song>();
 		createSongs(songsFileName);
+	}
+	
+	public static synchronized SongLibrary getInstance(String songsFileName) {
+		if (self == null) {
+			self = new SongLibrary(songsFileName);
+		}
+		return self;
 	}
 	
 	/*

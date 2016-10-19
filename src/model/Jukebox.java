@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Observable;
@@ -43,7 +44,7 @@ public class Jukebox extends Observable {
 	public Jukebox() {
 		authenticator = new CardReader();
 		decider = new Decider();
-		library = new SongLibrary("songs.txt");
+		library = SongLibrary.getInstance("songs.txt");
 		songQueue = new SongQueue();
 		currentAccount = null;
 		// currentSong = null;    <------ commenting out.  We don't really need it anymore.
@@ -316,6 +317,9 @@ public class Jukebox extends Observable {
 
 		@Override
 		public String getElementAt(int index) {
+			if (requests.size() == 0) {
+				return "";
+			}
 			return requests.get(index).toString();
 		}
 

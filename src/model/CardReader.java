@@ -17,7 +17,7 @@ public class CardReader {
 	private AccountCollection accounts; // creates and holds the account collection
 	
 	public CardReader() {
-		accounts = new AccountCollection();
+		accounts = AccountCollection.getInstance();
 	}
 	
 	
