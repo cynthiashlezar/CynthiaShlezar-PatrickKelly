@@ -280,6 +280,8 @@ public class Jukebox extends Observable {
 			setChanged();
 			notifyObservers();
 		}
+		
+
 
 		/*
 		 * This method implements the EndOfSongListener interface.  When the SongPlayer is done playing
@@ -307,7 +309,7 @@ public class Jukebox extends Observable {
 		}
 
 		@Override
-		public Object getElementAt(int index) {
+		public String getElementAt(int index) {
 			return requests.get(index).toString();
 		}
 

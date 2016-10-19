@@ -52,10 +52,11 @@ public class JukeboxView extends JPanel implements Observer {
 		this.add(loginScreen);
 		system.addObserver(loginScreen);	
 		
-		queue = new QueueView(350, 400, system);
+		queue = new QueueView(350, 750, system);
 		queue.setLocation(375, 25);
 		this.add(queue);
 		system.addObserver(queue);
+
 		
 		
 	}

@@ -41,7 +41,12 @@ public class LibraryView extends JPanel implements Observer {
 		table.setLocation(0, 0);
 		songList.add(table);
 		
-		JScrollPane scroll = new JScrollPane(table);
+		
+		JScrollPane scroll = new JScrollPane(table, 
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		
 		songList.add(scroll);
 
 		this.add(songList);

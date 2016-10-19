@@ -1,14 +1,18 @@
 package view;
 
+import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 
 import model.Jukebox;
 import model.Jukebox.SongQueue;
+import model.SongRequest;
 
 public class QueueView extends JPanel implements Observer {
 	
@@ -21,29 +25,52 @@ public class QueueView extends JPanel implements Observer {
 	 * call update in jukebox, any time a song finishes
 	 */
 	private Jukebox system;
-	private ListModel queue;
+	private SongQueue queue;
 	private JList list;
 
 	public QueueView(int width, int height, Jukebox system) {
 		
+		
+		
 		setSize(width, height);
+		//setBackground(Color.BLACK);
 		
 		this.system = system;
 		this.queue = system.getPlaylist();
+
+		
+//		DefaultListModel<String> listModel = new DefaultListModel<>();
+//		listModel.addElement("USA");
+//		listModel.addElement("India");
+//		listModel.addElement("Vietnam");
+//		listModel.addElement("Canada");
+//		listModel.addElement("Denmark");
+//		listModel.addElement("France");
+//		listModel.addElement("Great Britain");
+//		listModel.addElement("Japan");
 		
 		list = new JList();
+		
 		list.setModel(queue);
 		
-		list.setSize(width, height);
-		this.add(list);
 		
+		this.add(list);
+		JScrollPane scroll = new JScrollPane(list);
+		this.add(scroll);
 	}
+	
+
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("update the queue gui!!");
+		System.out.println("\t\tThings in the queue: ");
+		for(int i = 0; i < queue.getSize(); i++) {
+			System.out.println("\t\t\t" + queue.getElementAt(i));
+		}
 		queue = system.getPlaylist();
 		list.setModel(queue);
-		
+			
 	}
 
 }

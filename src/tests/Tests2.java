@@ -284,13 +284,13 @@ public class Tests2 {
 		
 	}
 
-	@Test
-	public void testGetElementAt() {
-		Jukebox j = new Jukebox();
-		//j.addSongToQueue();
-		SongQueue q = j.getPlaylist();
-		
-		System.out.println("TEST: " + q.getElementAt(0));
-	}
+//	@Test
+//	public void testGetElementAt() {
+//		Jukebox j = new Jukebox();
+//		j.addSongToQueue(j.library.getSong("Tada"));
+//		SongQueue q = j.getPlaylist();
+//		
+//		System.out.println("TEST: " + q.getElementAt(0));
+//	}
 
 }
