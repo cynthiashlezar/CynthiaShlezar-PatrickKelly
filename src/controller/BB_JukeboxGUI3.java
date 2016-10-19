@@ -6,6 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -38,6 +43,7 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 	private JPanel statusPanel;
 	private JPanel emptyPanel;
 	private ButtonListener listener;
+	private WindowHandler handler;
 	
 	//selector panel stuff
 	private JButton songSelector;
@@ -64,7 +70,28 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 	
 	public BB_JukeboxGUI3() {
 		
-		jukebox = new Jukebox();
+		handler = new WindowHandler();
+		this.addWindowListener(handler);
+		int loadQuestion = JOptionPane.showConfirmDialog(null, "Do you want to load the business?", "Load?", JOptionPane.YES_NO_OPTION);
+		if (loadQuestion == JOptionPane.YES_OPTION) {
+			try {
+				FileInputStream fileIn = new FileInputStream("extra_files/savestate.ser");
+				ObjectInputStream in = new ObjectInputStream(fileIn);
+				jukebox = (Jukebox) in.readObject();
+				in.close();
+				fileIn.close();
+				jukebox.homeMadeNotify();
+			} catch (IOException i) {
+				System.out.println("couldn't open file");
+				i.printStackTrace();
+				
+			} catch (ClassNotFoundException e) {
+				System.out.println("No jukebox in here");
+				e.printStackTrace();
+			}
+		} else {
+			jukebox = new Jukebox();
+		} 
 		
 		this.setSize(1000, 400);
 		this.setVisible(true);
@@ -218,11 +245,10 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		
+		queuePanel.remove(list);
 		listModel = jukebox.getPlaylist();
 		list = new JList<String>(listModel);
-		list.setModel(listModel);
 		queuePanel.add(list);
-		list.setModel(listModel);
 		
 		System.out.println("update the queue gui!!");
 		System.out.println("\t\tThings in the queue: ");
@@ -240,6 +266,8 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 			+ ((jukebox.getUserCredit()/60)%60) + ":"
 			+ ((jukebox.getUserCredit()))%60);
 		}
+		validate();
+		repaint();
 	}
 	
 	
@@ -307,6 +335,71 @@ public class BB_JukeboxGUI3 extends JFrame implements Observer {
 
 		
 	}
+	
+	private class WindowHandler implements WindowListener {
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			// TODO Auto-generated method stub
+			int reply = JOptionPane.showConfirmDialog(null, "Do you want to save the business?", "Save?", JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.YES_OPTION) {
+				// save things
+				try {
+					System.out.println("closing");
+					FileOutputStream fileOut = new FileOutputStream("extra_files/savestate.ser");
+					ObjectOutputStream out = new ObjectOutputStream(fileOut);
+					out.writeObject(jukebox);
+					out.close();
+					fileOut.close();
+				} catch (IOException exception) {
+					System.out.println("You couldn't save to an outpult file.  WAH WAH.");
+					exception.printStackTrace();
+				}
+			} else {
+				System.exit(0);
+			}
+			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+			
+		}
+		
+	}
+
 
 
 
