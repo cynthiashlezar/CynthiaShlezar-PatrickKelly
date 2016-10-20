@@ -1,3 +1,16 @@
+/*
+ * Name: Cynthia Shlezar and Patrick Kelly
+ * 
+ * Class: QueueView
+ * 
+ * Purpose: the purpose of QueueView is to provide a panel in which the entire
+ *  song playlist can be seen. The class utilizes JList to do so. The JList's model
+ *  is based on the SongQueue class that exists in Jukebox. SongQueue extends ListModel.
+ *  The JList is updated an redrawn anytime the Jukebox updates the observers, which is
+ *  basically anythime a song ends or is added to the playlist (or at least in concern
+ *  for this class). The update method in this class grabs a new reference to the SongQueue
+ *  in Jukebox and add that into the JList.
+ */
 package view;
 
 import java.awt.Color;
@@ -59,6 +72,14 @@ public class QueueView extends JPanel implements Observer {
 		//this.add(scroll);
 	}
 	
+	/*Method: update
+	 * 
+	 * Purpose: The purpose of update is to retrieve a new SongQueue reference from the system
+	 *          , add that to the JList, and have the JList display the new songlist
+	 *          
+	 * (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 
 
 	@Override

@@ -11,6 +11,7 @@ package view;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -98,9 +99,9 @@ public class UserLogin extends JPanel implements Observer {
 			status.setText("Please log in.");
 		} else {
 			status.setText("Played: " + system.getUserSongsPlayed()
-				+ " Credit: " + (system.getUserCredit()/60)/60 + ":"
-				+ ((system.getUserCredit()/60)%60) + ":"
-				+ ((system.getUserCredit()))%60);
+				+ " Credit: " + String.format("%02d",(system.getUserCredit()/60)/60) + ":"
+				+ (String.format("%02d",(system.getUserCredit()/60)%60)) + ":"
+				+ (String.format("%02d",system.getUserCredit()%60)));
 		}
 		validate();
 		repaint();

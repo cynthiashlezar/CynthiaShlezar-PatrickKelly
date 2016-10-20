@@ -1,3 +1,14 @@
+/*
+ * Names: Cynthia Shlezar & Patrick Kelly
+ * 
+ * Class: LibraryView
+ * 
+ * Purpose: the purpose of the library view is to create a way for the user to look
+ *          at all avaiable songs to pick from, and then select one song to play, 
+ *          granted that they are logged in, they have enough credit, they have played
+ *          less than 3 songs in one day, and a song they have chosen has also been
+ *          played less than 3 times in one day.
+ */
 package view;
 
 import java.awt.Color;
@@ -64,12 +75,22 @@ public class LibraryView extends JPanel implements Observer {
 		selectSong.addActionListener(new ButtonListener());
 	}
 	
+	/*
+	 * Class: ButtonListener
+	 * 
+	 *Purpose: the purpose of button listener is to select a song from 
+	 *the table send that to the jukebox and play the song if the user 
+	 *is logged in and the user has enough available plays and if the song 
+	 *is available to play as well. The action performed method utilizes e-news
+	 * to tell whether or not there was an error occurred
+	 */
+	
 	private class ButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-SongSelection truth = SongSelection.FAILURE;
+			SongSelection truth = SongSelection.FAILURE;
 			
 			if (system.printUsername().equals("")) {
 				JOptionPane.showMessageDialog(null, "Log in first.");
@@ -110,7 +131,7 @@ SongSelection truth = SongSelection.FAILURE;
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
+		//nothing
 	}
 
 }

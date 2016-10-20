@@ -132,6 +132,19 @@ public class JukeboxGUI extends JFrame {
 		g.setVisible(true);
 	}
 	
+	/*
+	 * Class: WindowHandler
+	 * 
+	 * Purpose: We need to do things whenever the gui's window is closed, so
+	 *          the WindowHandler does that. It's basically a listener for when
+	 *          the user does something with With closing the window so 
+	 *          For example when the user closes the window then the GUI knows
+	 *          Whether or not to save the current state of the object to a file.
+	 *          The method window closing can save the jukebox object into a file 
+	 *          and if the file couldn't be read or couldn't be written in then 
+	 *          an exception is thrown
+	 */
+	
 	private class WindowHandler implements WindowListener {
 
 		@Override
@@ -145,6 +158,17 @@ public class JukeboxGUI extends JFrame {
 			// TODO Auto-generated method stub
 			
 		}
+		/*Method: windowClosing
+		 * 
+		 * Purpose: AJ option pain shows a confirmed dialogue with the options
+		 *  yes or now asking whether or not you want to save the state of the 
+		 *  jukebox is the user wants to save the state of the jukebox then it
+		 *   is written to a file if not nothing is written into the file and 
+		 *   the GUI closes
+		 *   
+		 * (non-Javadoc)
+		 * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
+		 */
 
 		@Override
 		public void windowClosing(WindowEvent e) {
@@ -171,25 +195,25 @@ public class JukeboxGUI extends JFrame {
 
 		@Override
 		public void windowDeactivated(WindowEvent e) {
-			// TODO Auto-generated method stub
+			// not used
 			
 		}
 
 		@Override
 		public void windowDeiconified(WindowEvent e) {
-			// TODO Auto-generated method stub
+			// not used
 			
 		}
 
 		@Override
 		public void windowIconified(WindowEvent e) {
-			// TODO Auto-generated method stub
+			// not used
 			
 		}
 
 		@Override
 		public void windowOpened(WindowEvent e) {
-			// TODO Auto-generated method stub
+			// not used
 			
 			
 		}
