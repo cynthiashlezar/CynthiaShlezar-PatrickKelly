@@ -32,6 +32,7 @@ import java.time.LocalDate;
  * folder of the project.
  */
 
+@SuppressWarnings("serial")
 public class SongLibrary implements TableModel, Serializable {
 	
 	private TreeMap<String, Song> library;
@@ -69,7 +70,6 @@ public class SongLibrary implements TableModel, Serializable {
 	private void createSongs(String songsFileName)  {
 		// variables for opening and parsing the songs text file
 		File songsFile;
-		String line;
 		StringTokenizer tokens;
 		// variables for creating the song
 		String title, artist, fileName;
@@ -131,9 +131,10 @@ public class SongLibrary implements TableModel, Serializable {
 	
 	/*
 	 * Returns an ArrayList containing all the songs in the SongLibrary.  Used
-	 * by the view to be able to list the songs.
+	 * basically as a helper method for getValueAt(); getValueAt() works more easily
+	 * if the songs are in an ArrayList.
 	 */
-	public ArrayList<Song> fetchLibrary() {
+	private ArrayList<Song> fetchLibrary() {
 		
 		ArrayList<Song> songs = new ArrayList<>();
 		
@@ -160,6 +161,12 @@ public class SongLibrary implements TableModel, Serializable {
 		return String.class;
 	}
 
+	/*
+	 * Returns the number of columns in the TableModel.
+	 * 
+	 * (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
 	@Override
 	public int getColumnCount() {
 		return 3;
@@ -182,7 +189,7 @@ public class SongLibrary implements TableModel, Serializable {
 	}
 
 	/*
-	 * Returns the number of rows in the TableModel.
+	 * Returns the number of rows in the TableModel.  (The size of the library.)
 	 * 
 	 * (non-Javadoc)
 	 * @see javax.swing.table.TableModel#getRowCount()
@@ -198,8 +205,9 @@ public class SongLibrary implements TableModel, Serializable {
 	 */
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		
+		// use fetchLibrary() to get the songs in an array list for easy processing
 		ArrayList<Song> songsArrayList = fetchLibrary();
+		// make sure we're only dealing with indexes within the size of the library
 		if (rowIndex < 0 || rowIndex >= songsArrayList.size()) {
 			return null;
 		}
@@ -220,7 +228,7 @@ public class SongLibrary implements TableModel, Serializable {
 	 */
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		// No.
+		// No.  Not used.
 		return false;
 	}
 	

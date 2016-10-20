@@ -14,6 +14,7 @@ import java.io.Serializable;
  * Section:  Miranda's
  */
 
+@SuppressWarnings("serial")
 public class CardReader implements Serializable {
 	
 	private AccountCollection accounts; // creates and holds the account collection

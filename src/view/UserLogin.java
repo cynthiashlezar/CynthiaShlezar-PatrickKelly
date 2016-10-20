@@ -151,44 +151,9 @@ JButton buttonClicked = (JButton) e.getSource();
 			if(buttonClicked.getText().equals("Sign out")) {
 				system.removeCurrentAccount();
 			}
-			
-			
-			
-//			JButton buttonClicked = (JButton) e.getSource();
-//			
-//			if(buttonClicked.getText().equals("Log in")) {
-//
-//				StringBuilder pass = new StringBuilder();
-//				pass.append(passField.getPassword());
-//				
-//				if(system.getCurrentAccount() != null) {
-//					JOptionPane.showMessageDialog(null, "Someone's already logged in!");
-//				}
-//				else if(!system.useCardReader(accField.getText(), pass.toString())){
-//					
-//					JOptionPane.showMessageDialog(null, "Incorrect Username or Password!");
-//					
-//				}
-//				else {
-//					status.setText("User:" + system.getCurrentAccount().getName() +
-//							" Credit:" + system.getCurrentAccount().getCreditAvailable()/60/60 + " hours");
-//				}
-//				update(system, null);
-//
-//			}
-//			
-//			if(buttonClicked.getText().equals("Sign out")) {
-//				if(system.getCurrentAccount() == null)
-//					JOptionPane.showMessageDialog(null, "There was no one logged in!");
-//				system.removeCurrentAccount();
-//				status.setText("Not logged in");
-//				update(system, null);
-//			}
-//			
-//			
+						
 		} 
 		
 	}
-	
 
 }
