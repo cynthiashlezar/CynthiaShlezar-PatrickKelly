@@ -1,22 +1,14 @@
 package model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Observable;
-import java.util.TreeMap;
-
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.TableModel;
 
 import songplayer.EndOfSongEvent;
 import songplayer.EndOfSongListener;
-import songplayer.SongPlayer;
 
 /*
  * Class: Jukebox  
@@ -31,14 +23,13 @@ import songplayer.SongPlayer;
  * Course: CSC 335 (Fall '16)
  */
 
+@SuppressWarnings("serial")
 public class Jukebox extends Observable implements Serializable {
 	
 	private CardReader authenticator;
 	private Decider decider;
 	private SongLibrary library;
-	private SongPlayer player;
 	private Account currentAccount;
-	// private Song currentSong;  <------- not really used; commenting out for now
 	private SongQueue songQueue;
 	
 	public Jukebox() {
@@ -47,7 +38,6 @@ public class Jukebox extends Observable implements Serializable {
 		library = SongLibrary.getInstance("songs.txt");
 		songQueue = new SongQueue();
 		currentAccount = null;
-		// currentSong = null;    <------ commenting out.  We don't really need it anymore.
 	}
 	
 	
@@ -71,17 +61,21 @@ public class Jukebox extends Observable implements Serializable {
 		if (currentAccount == null) {
 			return SongSelection.NOT_LOGGED_IN;
 		}
-		// check to see if the song exists and get the song object
+		// check to see if the song exists
 		if (! library.songExists(title)) {
-			System.out.println("Song doesn't exist!!!!");
+			// if not, say so
 			return SongSelection.SONG_NOT_EXIST;
 		} else {
+			// song exists - get it from the library and see if
+			// it can be played by the current user today
 			requested = library.getSong(title);
 			result = decider.canPlaySong(currentAccount, requested);
 		}	
 		if (result == SongSelection.SUCCESS) {
+			// if so, add the song to the queue
 			addSongToQueue(requested);
 		}
+		// let the view know whether the request was successful (and if not, why)
 		return result;
 	}
 	
@@ -92,8 +86,12 @@ public class Jukebox extends Observable implements Serializable {
 	 */
 	public boolean useCardReader(String username, String password) {
 		currentAccount = authenticator.authenticateUser(username, password);
+		// update the views
 		setChanged();
 		notifyObservers();
+		// let the calling method know whether a user is now logged in
+		// NOTE: the case where someone was already logged in is handled by the view...
+		// if someone is already logged in, the view spits out an error message
 		return (currentAccount != null);
 	}
 	
@@ -107,47 +105,13 @@ public class Jukebox extends Observable implements Serializable {
 	 * @returns: void
 	 */
 	public void addSongToQueue(Song song) {
+		// construct a song request object
 		SongRequest songRequest = new SongRequest(song, songQueue);
-		System.out.println(songRequest);
-		System.out.println("" + songQueue.getSize());
+		// add it to the queue
 		songQueue.addSong(songRequest);
+		// update view
 		setChanged();
 		notifyObservers();
-	}
-	
-	/*
-	 * Returns the title of the song currently being played by the Jukebox so
-	 * that the view may display the title when it updates itself.
-	 * 
-	 * Assumes that a SongRequest has been executed; the SongRequest sets
-	 * this variable.  
-	 * 
-	 * Just used for testing at this point.  Perhaps testing can be re-done such that
-	 * we can get rid of this method.
-
-	 */
-	public String getCurrentSongTitle() {
-		if (songQueue.getSize() == 0) {
-			return "";
-		}
-		String currentSongTitle = songQueue.getElementAt(0).toString();
-		currentSongTitle = currentSongTitle.substring(currentSongTitle.indexOf(' ') + 1);
-		currentSongTitle = currentSongTitle.substring(0, currentSongTitle.indexOf(' '));
-		return currentSongTitle;
-	}
-	
-	
-	/*
-	 * Returns the SongQueue object, which listens for the end of a song before
-	 * playing another.  This is used in the creation of SongRequest objects (since
-	 * an EndOfSongListener object is used by the SongPlayer when reporting that
-	 * a song is done.
-	 * 
-	 * Used for testing only, really.  But if I re-do some tests differently, I can perhaps
-	 * get rid of this method.
-	 */
-	public EndOfSongListener getSongQueueListener() {
-		return songQueue;
 	}
 	
 	
@@ -181,21 +145,35 @@ public class Jukebox extends Observable implements Serializable {
 	/*
 	 * Returns the SongQueue in ListModel form for use by the view.
 	 */
-	public ListModel getPlaylist() {
+	public ListModel<String> getPlaylist() {
 		return songQueue;
 		
 	}
 	
+	/*
+	 * Returns the song library as a TableModel so that the view can display its wares
+	 */
 	public TableModel getLibraryTable() {
 		return library;
 	}
 	
+	/*
+	 * Returns (as a String, so as to be usable by the view) the number of songs
+	 * the current user has played today.  Used by the view to display the user's status.
+	 */
 	public String getUserSongsPlayed() {
-		// TODO Auto-generated method stub
 		return "" + currentAccount.getNumSongsPlayedToday();
 	}
 	
-	
+	/*
+	 * This method is called by the GUI when the system begins.  It causes the
+	 * jukebox to tell its Observers to update themselves.  Also, if there
+	 * is a song in the queue, it executes the songRequest object, starting the cycle
+	 * of playing the songs again.
+	 * 
+	 * NOTE:  This should only be called when starting the Jukebox.  It's used to get the views
+	 * updated and the SongQueue executing requests when the Jukebox is loaded from a saved state.
+	 */
 	public void homeMadeNotify() {
 		if (songQueue.getSize() != 0) {
 			songQueue.executeZerothSong();
@@ -246,12 +224,11 @@ public class Jukebox extends Observable implements Serializable {
 		 */
 		public void addSong(SongRequest request) {
 			if (requests.isEmpty()) {
+				// if the queue is empty, add the request to the queue and execute it.
 				requests.add(request);
 				requests.get(0).execute();
-				
-				// for testing
-				// System.out.println("Executing song request for " + request.fileName);
 			} else {
+				// otherwise, a song is playing... just add the request to the queue.
 				requests.add(request);
 			}
 			setChanged();
@@ -270,10 +247,10 @@ public class Jukebox extends Observable implements Serializable {
 		 */
 		@Override
 		public void songFinishedPlaying(EndOfSongEvent eventWithFileNameAndDateFinished) {
-			System.out.println("got EndOfSongEvent message...");
+			// remove the request that just finished playing.
 			requests.remove(0);
-			// setCurrentSong(null);    currentSong isn't used any more, but just commenting out for now.
 			if (! requests.isEmpty()) {
+				// play the next song if there's another request
 				requests.get(0).execute();
 			}
 			setChanged();
@@ -314,23 +291,13 @@ public class Jukebox extends Observable implements Serializable {
 
 		@Override
 		public void addListDataListener(ListDataListener l) {
-			//nothing
+			//nothing.  Not used in our program.
 		}
 
 		@Override
 		public void removeListDataListener(ListDataListener l) {
-			//nothing	
+			//nothing	Not used in our program.
 		} 
-		
-
-//		public ArrayList<Song> getSongQueue() {
-//			
-//			ArrayList<Song> songs = new ArrayList<>();
-//			for(int i = 0; i < requests.size(); i++) {
-//				songs.add(requests.get(i).getSong());
-//			}
-//			return songs;
-//		}
 		
 		/*
 		 * This method is used when loading a saved jukebox state.  It executes the song

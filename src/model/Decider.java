@@ -18,6 +18,7 @@ import java.io.Serializable;
  * Section:  Miranda's
  */
 
+@SuppressWarnings("serial")
 public class Decider implements Serializable {
 	
 	private int songsPerDayPerPerson;      // the number of songs a person can play per day
@@ -48,20 +49,23 @@ public class Decider implements Serializable {
 	 * rather than that the song has already been played too many times.
 	 */
 	public SongSelection canPlaySong(Account user, Song song) {
-		// Check to see whether this user may play this song today.
+		// Check to see whether the user has enough credit
 		if (user.getCreditAvailable() < song.getLength()) {
 			return SongSelection.NOT_ENOUGH_CREDIT;
 		}
+		// see whether the user has played max # songs today
 		if (user.getNumSongsPlayedToday() >= songsPerDayPerPerson) {
 			return SongSelection.NO_PLAYS_REMAINING_USER;
 		}
+		// see whether the song has been played max # times today
 		if (song.getTimesPlayedToday() >= numTimesPlayedPermissible) {
 			return SongSelection.NO_PLAYS_REMAINING_SONG;
 		}
-		// and if all that is false, we can proceed with returning a SUCCESS value.
-		// increment user songs
+		// and if all that is okay, we can proceed...
+		
+		// increment user # songs played today
 		user.incrementNumSongsPlayedToday();
-		// increment song's num times played
+		// increment song's # times played today
 		song.setTimesPlayedToday();
 		// remove credit from user's account
 		user.withdrawCredit(song.getLength());

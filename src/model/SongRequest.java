@@ -22,6 +22,7 @@ import songplayer.SongPlayer;
  * and uses the SongPlayer class to play the song.
  */
 
+@SuppressWarnings("serial")
 public class SongRequest implements Serializable {
 	
 	EndOfSongListener listener;
@@ -45,11 +46,6 @@ public class SongRequest implements Serializable {
 	 */
 	public void execute() {
 		SongPlayer.playFile(listener, fileName);
-//		try {
-//			Thread.sleep(1000);
-//		} catch (InterruptedException e) {
-//			System.out.println("Sleep interrupted by JUnit");
-//		}
 		System.out.println(song.getTitle());
 	}
 	
@@ -59,12 +55,15 @@ public class SongRequest implements Serializable {
 	 * 
 	 * Returns a String.
 	 * 
-	 * TODO: remember to think about formatting seconds into MM:SS
+	 * 
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "" + song.getLength() + " " + song.getTitle() + " by " + song.getArtist();
+		int length = song.getLength();
+		int minutes = (length/60)%60;
+		int seconds = length%60;
+		return "" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + " " + song.getTitle() + " by " + song.getArtist();
 	}
 	
 	/*

@@ -38,6 +38,7 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@SuppressWarnings("serial")
 public class Account implements Serializable {
 	
 	String name;					//username login

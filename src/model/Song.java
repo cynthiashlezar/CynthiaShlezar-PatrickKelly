@@ -17,6 +17,7 @@ import java.time.LocalDate;
  * Section:  Miranda's
  */
 
+@SuppressWarnings("serial")
 public class Song implements Serializable {
 
 	private File file;

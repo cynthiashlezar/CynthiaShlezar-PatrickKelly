@@ -32,19 +32,29 @@ import java.time.LocalDate;
  * folder of the project.
  */
 
+@SuppressWarnings("serial")
 public class SongLibrary implements TableModel, Serializable {
 	
 	private TreeMap<String, Song> library;
 	private static SongLibrary self;
 	
 	/*
-	 * Constructor.  Requires a filename.  Assumes this file is in the "extra_files" folder.
+	 * Constructor.  Private, because the we're using the Singleton pattern and only ever
+	 * want one instance of the SongLibrary.
+	 * 
+	 * Requires a filename.  Assumes this file is in the "extra_files" folder.
 	 */
 	private SongLibrary(String songsFileName) {
 		library = new TreeMap<String, Song>();
 		createSongs(songsFileName);
 	}
 	
+	/*
+	 * Gets a reference to the Singleton SongLibrary object.  (If the object hasn't
+	 * been created yet, this method calls the private constructor.)
+	 * 
+	 * Requires a filename.  Assumes this file is in the "extra_files" folder.
+	 */
 	public static synchronized SongLibrary getInstance(String songsFileName) {
 		if (self == null) {
 			self = new SongLibrary(songsFileName);
@@ -60,7 +70,6 @@ public class SongLibrary implements TableModel, Serializable {
 	private void createSongs(String songsFileName)  {
 		// variables for opening and parsing the songs text file
 		File songsFile;
-		String line;
 		StringTokenizer tokens;
 		// variables for creating the song
 		String title, artist, fileName;
@@ -104,10 +113,6 @@ public class SongLibrary implements TableModel, Serializable {
 		return library.containsKey(title);
 	}
 	
-	public TreeMap<String, Song> retrieveTitles() {
-		return library;
-	}
-	
 	
 	/*
 	 * Returns the song object associated with the title.  If the song isn't in the library,
@@ -126,9 +131,10 @@ public class SongLibrary implements TableModel, Serializable {
 	
 	/*
 	 * Returns an ArrayList containing all the songs in the SongLibrary.  Used
-	 * by the view to be able to list the songs.
+	 * basically as a helper method for getValueAt(); getValueAt() works more easily
+	 * if the songs are in an ArrayList.
 	 */
-	public ArrayList<Song> fetchLibrary() {
+	private ArrayList<Song> fetchLibrary() {
 		
 		ArrayList<Song> songs = new ArrayList<>();
 		
@@ -142,22 +148,36 @@ public class SongLibrary implements TableModel, Serializable {
 
 	
 
+	/*
+	 * Returns the Java Class of a column in the TableModel.
+	 * 
+	 * (Hint: all columns are String.)
+	 * 
+	 * (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getColumnClass(int)
+	 */
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
-//		switch (columnIndex) {
-//			case 0: return String.class;
-//			case 1: return String.class;
-//			case 2: return Integer.class;
-//			default: return null;
-//		}
 		return String.class;
 	}
 
+	/*
+	 * Returns the number of columns in the TableModel.
+	 * 
+	 * (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getColumnCount()
+	 */
 	@Override
 	public int getColumnCount() {
 		return 3;
 	}
 
+	/*
+	 * Returns the names of the columns in the TableModel as Strings.
+	 * 
+	 * (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getColumnName(int)
+	 */
 	@Override
 	public String getColumnName(int columnIndex) {
 		switch (columnIndex) {
@@ -168,18 +188,26 @@ public class SongLibrary implements TableModel, Serializable {
 	}
 	}
 
+	/*
+	 * Returns the number of rows in the TableModel.  (The size of the library.)
+	 * 
+	 * (non-Javadoc)
+	 * @see javax.swing.table.TableModel#getRowCount()
+	 */
 	@Override
 	public int getRowCount() {
 		return library.size();
 	}
 
 	/*
-	 * Interestingly, ...  wait.  Never mind.
+	 * Returns the String value for the data (song title, artist, or length) stored
+	 * at the given RowIndex and ColumnIndex.
 	 */
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		
+		// use fetchLibrary() to get the songs in an array list for easy processing
 		ArrayList<Song> songsArrayList = fetchLibrary();
+		// make sure we're only dealing with indexes within the size of the library
 		if (rowIndex < 0 || rowIndex >= songsArrayList.size()) {
 			return null;
 		}
@@ -192,25 +220,31 @@ public class SongLibrary implements TableModel, Serializable {
 		}
 	}
 
+	/*
+	 * The rest of the TableModel methods below are not used by our program.
+	 * 
+	 * (non-Javadoc)
+	 * @see javax.swing.table.TableModel#isCellEditable(int, int)
+	 */
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		// No.
+		// No.  Not used.
 		return false;
 	}
 	
 	@Override
 	public void addTableModelListener(TableModelListener l) {
-		// no.
+		// no.  Not used by our program.
 	}
 
 	@Override
 	public void removeTableModelListener(TableModelListener l) {
-		// no
+		// no.  Not used by our program.
 	}
 
 	@Override
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		// no
+		// no.  Not used by our program.
 	}
 	
 	

@@ -111,20 +111,6 @@ public class LibraryView extends JPanel implements Observer {
 				JOptionPane.showMessageDialog(null, "You can't play the song!");
 			}
 			update(system, null);
-//			SongSelection truth = SongSelection.FAILURE;
-//			
-//			if (system.getCurrentAccount() == null) {
-//				JOptionPane.showMessageDialog(null, "Log in first.");
-//				return;
-//			}
-//			
-//			System.out.println("***Song to be requested: " + (String) table.getValueAt(table.getSelectedRow(), 0));
-//			truth = system.requestSongFromMenu((String) table.getValueAt(table.getSelectedRow(), 0));
-//			
-//			if(truth != SongSelection.SUCCESS) {
-//				JOptionPane.showMessageDialog(null, "You can't play the song!");
-//			}
-//			update(system, null);
 		}
 		
 	}
