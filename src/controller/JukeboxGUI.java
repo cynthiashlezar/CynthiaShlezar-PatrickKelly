@@ -145,19 +145,9 @@ public class JukeboxGUI extends JFrame {
 	 *          an exception is thrown
 	 */
 	
-	private class WindowHandler implements WindowListener {
+	private class WindowHandler extends WindowAdapter {
 
-		@Override
-		public void windowActivated(WindowEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
 
-		@Override
-		public void windowClosed(WindowEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
 		/*Method: windowClosing
 		 * 
 		 * Purpose: AJ option pain shows a confirmed dialogue with the options
@@ -193,30 +183,7 @@ public class JukeboxGUI extends JFrame {
 			
 		}
 
-		@Override
-		public void windowDeactivated(WindowEvent e) {
-			// not used
-			
-		}
 
-		@Override
-		public void windowDeiconified(WindowEvent e) {
-			// not used
-			
-		}
-
-		@Override
-		public void windowIconified(WindowEvent e) {
-			// not used
-			
-		}
-
-		@Override
-		public void windowOpened(WindowEvent e) {
-			// not used
-			
-			
-		}
 		
 	}
 
